@@ -1,0 +1,1 @@
+import {IntegrationAdapter,AdapterResult} from './base'; export class CraftvaroAdapter extends IntegrationAdapter{name='Craftvaro';async health():Promise<AdapterResult<{status:string}>>{return process.env.CRAFTVARO_API_URL?{ok:true,data:{status:'configured'}}:{ok:false,error:'CRAFTVARO_API_URL not configured'}}}
