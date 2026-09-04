@@ -18,6 +18,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedOpportunitiesRouteImport } from './routes/_authenticated/opportunities'
 import { Route as AuthenticatedProjectsRouteImport } from './routes/_authenticated/projects'
+import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated/review'
 import { Route as ApiMessagesRouteImport } from './routes/api/messages'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as LegalCookiesRouteImport } from './routes/legal/cookies'
@@ -28,9 +29,19 @@ import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authen
 import { Route as AuthenticatedApplicationsIndexRouteImport } from './routes/_authenticated/applications/index'
 import { Route as AuthenticatedCasesIndexRouteImport } from './routes/_authenticated/cases/index'
 import { Route as AuthenticatedCasesCaseIdRouteImport } from './routes/_authenticated/cases/$caseId'
+import { Route as AuthenticatedContractorsIndexRouteImport } from './routes/_authenticated/contractors/index'
+import { Route as AuthenticatedContractorsProfileRouteImport } from './routes/_authenticated/contractors/profile'
+import { Route as AuthenticatedCouncilIndexRouteImport } from './routes/_authenticated/council/index'
+import { Route as AuthenticatedCouncilAnalyticsRouteImport } from './routes/_authenticated/council/analytics'
+import { Route as AuthenticatedCouncilCasesRouteImport } from './routes/_authenticated/council/cases'
+import { Route as AuthenticatedCouncilMapRouteImport } from './routes/_authenticated/council/map'
+import { Route as AuthenticatedCouncilReportingRouteImport } from './routes/_authenticated/council/reporting'
 import { Route as AuthenticatedFundingIndexRouteImport } from './routes/_authenticated/funding/index'
 import { Route as AuthenticatedFundingStackRouteImport } from './routes/_authenticated/funding/stack'
 import { Route as AuthenticatedPropertiesNewRouteImport } from './routes/_authenticated/properties/new'
+import { Route as AuthenticatedProviderOffersRouteImport } from './routes/_authenticated/provider/offers'
+import { Route as AuthenticatedProvidersIndexRouteImport } from './routes/_authenticated/providers/index'
+import { Route as AuthenticatedProvidersPipelineRouteImport } from './routes/_authenticated/providers/pipeline'
 import { Route as AuthenticatedSettingsPrivacyRouteImport } from './routes/_authenticated/settings/privacy'
 import { Route as ApiAgentChatRouteImport } from './routes/api/agent/chat'
 import { Route as ApiAgentsLearnRouteImport } from './routes/api/agents/learn'
@@ -117,6 +128,11 @@ const AuthenticatedProjectsRoute = AuthenticatedProjectsRouteImport.update({
   path: '/projects',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedReviewRoute = AuthenticatedReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ApiMessagesRoute = ApiMessagesRouteImport.update({
   id: '/api/messages',
   path: '/api/messages',
@@ -172,6 +188,47 @@ const AuthenticatedCasesCaseIdRoute =
     path: '/cases/$caseId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedContractorsIndexRoute =
+  AuthenticatedContractorsIndexRouteImport.update({
+    id: '/contractors/',
+    path: '/contractors/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedContractorsProfileRoute =
+  AuthenticatedContractorsProfileRouteImport.update({
+    id: '/contractors/profile',
+    path: '/contractors/profile',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedCouncilIndexRoute =
+  AuthenticatedCouncilIndexRouteImport.update({
+    id: '/council/',
+    path: '/council/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedCouncilAnalyticsRoute =
+  AuthenticatedCouncilAnalyticsRouteImport.update({
+    id: '/council/analytics',
+    path: '/council/analytics',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedCouncilCasesRoute =
+  AuthenticatedCouncilCasesRouteImport.update({
+    id: '/council/cases',
+    path: '/council/cases',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedCouncilMapRoute = AuthenticatedCouncilMapRouteImport.update({
+  id: '/council/map',
+  path: '/council/map',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCouncilReportingRoute =
+  AuthenticatedCouncilReportingRouteImport.update({
+    id: '/council/reporting',
+    path: '/council/reporting',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedFundingIndexRoute =
   AuthenticatedFundingIndexRouteImport.update({
     id: '/funding/',
@@ -188,6 +245,24 @@ const AuthenticatedPropertiesNewRoute =
   AuthenticatedPropertiesNewRouteImport.update({
     id: '/properties/new',
     path: '/properties/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProviderOffersRoute =
+  AuthenticatedProviderOffersRouteImport.update({
+    id: '/provider/offers',
+    path: '/provider/offers',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProvidersIndexRoute =
+  AuthenticatedProvidersIndexRouteImport.update({
+    id: '/providers/',
+    path: '/providers/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProvidersPipelineRoute =
+  AuthenticatedProvidersPipelineRouteImport.update({
+    id: '/providers/pipeline',
+    path: '/providers/pipeline',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedSettingsPrivacyRoute =
@@ -404,6 +479,7 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/opportunities': typeof AuthenticatedOpportunitiesRoute
   '/projects': typeof AuthenticatedProjectsRoute
+  '/review': typeof AuthenticatedReviewRoute
   '/api/messages': typeof ApiMessagesRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/legal/cookies': typeof LegalCookiesRoute
@@ -412,8 +488,15 @@ export interface FileRoutesByFullPath {
   '/admin/release': typeof AuthenticatedAdminReleaseRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
+  '/contractors/profile': typeof AuthenticatedContractorsProfileRoute
+  '/council/analytics': typeof AuthenticatedCouncilAnalyticsRoute
+  '/council/cases': typeof AuthenticatedCouncilCasesRoute
+  '/council/map': typeof AuthenticatedCouncilMapRoute
+  '/council/reporting': typeof AuthenticatedCouncilReportingRoute
   '/funding/stack': typeof AuthenticatedFundingStackRoute
   '/properties/new': typeof AuthenticatedPropertiesNewRoute
+  '/provider/offers': typeof AuthenticatedProviderOffersRoute
+  '/providers/pipeline': typeof AuthenticatedProvidersPipelineRoute
   '/settings/privacy': typeof AuthenticatedSettingsPrivacyRoute
   '/api/agent/chat': typeof ApiAgentChatRoute
   '/api/agents/learn': typeof ApiAgentsLearnRoute
@@ -447,7 +530,10 @@ export interface FileRoutesByFullPath {
   '/api/workflow/request-quotes': typeof ApiWorkflowRequestQuotesRoute
   '/applications/': typeof AuthenticatedApplicationsIndexRoute
   '/cases/': typeof AuthenticatedCasesIndexRoute
+  '/contractors/': typeof AuthenticatedContractorsIndexRoute
+  '/council/': typeof AuthenticatedCouncilIndexRoute
   '/funding/': typeof AuthenticatedFundingIndexRoute
+  '/providers/': typeof AuthenticatedProvidersIndexRoute
   '/api/application-pack/': typeof ApiApplicationPackIndexRoute
   '/api/provider-offers/': typeof ApiProviderOffersIndexRoute
   '/api/public/integrations/craftvaro-webhook': typeof ApiPublicIntegrationsCraftvaroWebhookRoute
@@ -465,6 +551,7 @@ export interface FileRoutesByTo {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/opportunities': typeof AuthenticatedOpportunitiesRoute
   '/projects': typeof AuthenticatedProjectsRoute
+  '/review': typeof AuthenticatedReviewRoute
   '/api/messages': typeof ApiMessagesRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/legal/cookies': typeof LegalCookiesRoute
@@ -473,8 +560,15 @@ export interface FileRoutesByTo {
   '/admin/release': typeof AuthenticatedAdminReleaseRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
+  '/contractors/profile': typeof AuthenticatedContractorsProfileRoute
+  '/council/analytics': typeof AuthenticatedCouncilAnalyticsRoute
+  '/council/cases': typeof AuthenticatedCouncilCasesRoute
+  '/council/map': typeof AuthenticatedCouncilMapRoute
+  '/council/reporting': typeof AuthenticatedCouncilReportingRoute
   '/funding/stack': typeof AuthenticatedFundingStackRoute
   '/properties/new': typeof AuthenticatedPropertiesNewRoute
+  '/provider/offers': typeof AuthenticatedProviderOffersRoute
+  '/providers/pipeline': typeof AuthenticatedProvidersPipelineRoute
   '/settings/privacy': typeof AuthenticatedSettingsPrivacyRoute
   '/api/agent/chat': typeof ApiAgentChatRoute
   '/api/agents/learn': typeof ApiAgentsLearnRoute
@@ -508,7 +602,10 @@ export interface FileRoutesByTo {
   '/api/workflow/request-quotes': typeof ApiWorkflowRequestQuotesRoute
   '/applications': typeof AuthenticatedApplicationsIndexRoute
   '/cases': typeof AuthenticatedCasesIndexRoute
+  '/contractors': typeof AuthenticatedContractorsIndexRoute
+  '/council': typeof AuthenticatedCouncilIndexRoute
   '/funding': typeof AuthenticatedFundingIndexRoute
+  '/providers': typeof AuthenticatedProvidersIndexRoute
   '/api/application-pack': typeof ApiApplicationPackIndexRoute
   '/api/provider-offers': typeof ApiProviderOffersIndexRoute
   '/api/public/integrations/craftvaro-webhook': typeof ApiPublicIntegrationsCraftvaroWebhookRoute
@@ -528,6 +625,7 @@ export interface FileRoutesById {
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/opportunities': typeof AuthenticatedOpportunitiesRoute
   '/_authenticated/projects': typeof AuthenticatedProjectsRoute
+  '/_authenticated/review': typeof AuthenticatedReviewRoute
   '/api/messages': typeof ApiMessagesRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/legal/cookies': typeof LegalCookiesRoute
@@ -536,8 +634,15 @@ export interface FileRoutesById {
   '/_authenticated/admin/release': typeof AuthenticatedAdminReleaseRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
+  '/_authenticated/contractors/profile': typeof AuthenticatedContractorsProfileRoute
+  '/_authenticated/council/analytics': typeof AuthenticatedCouncilAnalyticsRoute
+  '/_authenticated/council/cases': typeof AuthenticatedCouncilCasesRoute
+  '/_authenticated/council/map': typeof AuthenticatedCouncilMapRoute
+  '/_authenticated/council/reporting': typeof AuthenticatedCouncilReportingRoute
   '/_authenticated/funding/stack': typeof AuthenticatedFundingStackRoute
   '/_authenticated/properties/new': typeof AuthenticatedPropertiesNewRoute
+  '/_authenticated/provider/offers': typeof AuthenticatedProviderOffersRoute
+  '/_authenticated/providers/pipeline': typeof AuthenticatedProvidersPipelineRoute
   '/_authenticated/settings/privacy': typeof AuthenticatedSettingsPrivacyRoute
   '/api/agent/chat': typeof ApiAgentChatRoute
   '/api/agents/learn': typeof ApiAgentsLearnRoute
@@ -571,7 +676,10 @@ export interface FileRoutesById {
   '/api/workflow/request-quotes': typeof ApiWorkflowRequestQuotesRoute
   '/_authenticated/applications/': typeof AuthenticatedApplicationsIndexRoute
   '/_authenticated/cases/': typeof AuthenticatedCasesIndexRoute
+  '/_authenticated/contractors/': typeof AuthenticatedContractorsIndexRoute
+  '/_authenticated/council/': typeof AuthenticatedCouncilIndexRoute
   '/_authenticated/funding/': typeof AuthenticatedFundingIndexRoute
+  '/_authenticated/providers/': typeof AuthenticatedProvidersIndexRoute
   '/api/application-pack/': typeof ApiApplicationPackIndexRoute
   '/api/provider-offers/': typeof ApiProviderOffersIndexRoute
   '/api/public/integrations/craftvaro-webhook': typeof ApiPublicIntegrationsCraftvaroWebhookRoute
@@ -591,6 +699,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/opportunities'
     | '/projects'
+    | '/review'
     | '/api/messages'
     | '/auth/callback'
     | '/legal/cookies'
@@ -599,8 +708,15 @@ export interface FileRouteTypes {
     | '/admin/release'
     | '/admin/security'
     | '/cases/$caseId'
+    | '/contractors/profile'
+    | '/council/analytics'
+    | '/council/cases'
+    | '/council/map'
+    | '/council/reporting'
     | '/funding/stack'
     | '/properties/new'
+    | '/provider/offers'
+    | '/providers/pipeline'
     | '/settings/privacy'
     | '/api/agent/chat'
     | '/api/agents/learn'
@@ -634,7 +750,10 @@ export interface FileRouteTypes {
     | '/api/workflow/request-quotes'
     | '/applications/'
     | '/cases/'
+    | '/contractors/'
+    | '/council/'
     | '/funding/'
+    | '/providers/'
     | '/api/application-pack/'
     | '/api/provider-offers/'
     | '/api/public/integrations/craftvaro-webhook'
@@ -652,6 +771,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/opportunities'
     | '/projects'
+    | '/review'
     | '/api/messages'
     | '/auth/callback'
     | '/legal/cookies'
@@ -660,8 +780,15 @@ export interface FileRouteTypes {
     | '/admin/release'
     | '/admin/security'
     | '/cases/$caseId'
+    | '/contractors/profile'
+    | '/council/analytics'
+    | '/council/cases'
+    | '/council/map'
+    | '/council/reporting'
     | '/funding/stack'
     | '/properties/new'
+    | '/provider/offers'
+    | '/providers/pipeline'
     | '/settings/privacy'
     | '/api/agent/chat'
     | '/api/agents/learn'
@@ -695,7 +822,10 @@ export interface FileRouteTypes {
     | '/api/workflow/request-quotes'
     | '/applications'
     | '/cases'
+    | '/contractors'
+    | '/council'
     | '/funding'
+    | '/providers'
     | '/api/application-pack'
     | '/api/provider-offers'
     | '/api/public/integrations/craftvaro-webhook'
@@ -714,6 +844,7 @@ export interface FileRouteTypes {
     | '/_authenticated/notifications'
     | '/_authenticated/opportunities'
     | '/_authenticated/projects'
+    | '/_authenticated/review'
     | '/api/messages'
     | '/auth/callback'
     | '/legal/cookies'
@@ -722,8 +853,15 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/release'
     | '/_authenticated/admin/security'
     | '/_authenticated/cases/$caseId'
+    | '/_authenticated/contractors/profile'
+    | '/_authenticated/council/analytics'
+    | '/_authenticated/council/cases'
+    | '/_authenticated/council/map'
+    | '/_authenticated/council/reporting'
     | '/_authenticated/funding/stack'
     | '/_authenticated/properties/new'
+    | '/_authenticated/provider/offers'
+    | '/_authenticated/providers/pipeline'
     | '/_authenticated/settings/privacy'
     | '/api/agent/chat'
     | '/api/agents/learn'
@@ -757,7 +895,10 @@ export interface FileRouteTypes {
     | '/api/workflow/request-quotes'
     | '/_authenticated/applications/'
     | '/_authenticated/cases/'
+    | '/_authenticated/contractors/'
+    | '/_authenticated/council/'
     | '/_authenticated/funding/'
+    | '/_authenticated/providers/'
     | '/api/application-pack/'
     | '/api/provider-offers/'
     | '/api/public/integrations/craftvaro-webhook'
@@ -879,6 +1020,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProjectsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/review': {
+      id: '/_authenticated/review'
+      path: '/review'
+      fullPath: '/review'
+      preLoaderRoute: typeof AuthenticatedReviewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/messages': {
       id: '/api/messages'
       path: '/api/messages'
@@ -949,6 +1097,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCasesCaseIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/contractors/': {
+      id: '/_authenticated/contractors/'
+      path: '/contractors'
+      fullPath: '/contractors/'
+      preLoaderRoute: typeof AuthenticatedContractorsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/contractors/profile': {
+      id: '/_authenticated/contractors/profile'
+      path: '/contractors/profile'
+      fullPath: '/contractors/profile'
+      preLoaderRoute: typeof AuthenticatedContractorsProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/council/': {
+      id: '/_authenticated/council/'
+      path: '/council'
+      fullPath: '/council/'
+      preLoaderRoute: typeof AuthenticatedCouncilIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/council/analytics': {
+      id: '/_authenticated/council/analytics'
+      path: '/council/analytics'
+      fullPath: '/council/analytics'
+      preLoaderRoute: typeof AuthenticatedCouncilAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/council/cases': {
+      id: '/_authenticated/council/cases'
+      path: '/council/cases'
+      fullPath: '/council/cases'
+      preLoaderRoute: typeof AuthenticatedCouncilCasesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/council/map': {
+      id: '/_authenticated/council/map'
+      path: '/council/map'
+      fullPath: '/council/map'
+      preLoaderRoute: typeof AuthenticatedCouncilMapRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/council/reporting': {
+      id: '/_authenticated/council/reporting'
+      path: '/council/reporting'
+      fullPath: '/council/reporting'
+      preLoaderRoute: typeof AuthenticatedCouncilReportingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/funding/': {
       id: '/_authenticated/funding/'
       path: '/funding'
@@ -968,6 +1165,27 @@ declare module '@tanstack/react-router' {
       path: '/properties/new'
       fullPath: '/properties/new'
       preLoaderRoute: typeof AuthenticatedPropertiesNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/provider/offers': {
+      id: '/_authenticated/provider/offers'
+      path: '/provider/offers'
+      fullPath: '/provider/offers'
+      preLoaderRoute: typeof AuthenticatedProviderOffersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/providers/': {
+      id: '/_authenticated/providers/'
+      path: '/providers'
+      fullPath: '/providers/'
+      preLoaderRoute: typeof AuthenticatedProvidersIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/providers/pipeline': {
+      id: '/_authenticated/providers/pipeline'
+      path: '/providers/pipeline'
+      fullPath: '/providers/pipeline'
+      preLoaderRoute: typeof AuthenticatedProvidersPipelineRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/settings/privacy': {
@@ -1246,16 +1464,27 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedOpportunitiesRoute: typeof AuthenticatedOpportunitiesRoute
   AuthenticatedProjectsRoute: typeof AuthenticatedProjectsRoute
+  AuthenticatedReviewRoute: typeof AuthenticatedReviewRoute
   AuthenticatedAdminIntegrationsRoute: typeof AuthenticatedAdminIntegrationsRoute
   AuthenticatedAdminReleaseRoute: typeof AuthenticatedAdminReleaseRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedCasesCaseIdRoute: typeof AuthenticatedCasesCaseIdRoute
+  AuthenticatedContractorsProfileRoute: typeof AuthenticatedContractorsProfileRoute
+  AuthenticatedCouncilAnalyticsRoute: typeof AuthenticatedCouncilAnalyticsRoute
+  AuthenticatedCouncilCasesRoute: typeof AuthenticatedCouncilCasesRoute
+  AuthenticatedCouncilMapRoute: typeof AuthenticatedCouncilMapRoute
+  AuthenticatedCouncilReportingRoute: typeof AuthenticatedCouncilReportingRoute
   AuthenticatedFundingStackRoute: typeof AuthenticatedFundingStackRoute
   AuthenticatedPropertiesNewRoute: typeof AuthenticatedPropertiesNewRoute
+  AuthenticatedProviderOffersRoute: typeof AuthenticatedProviderOffersRoute
+  AuthenticatedProvidersPipelineRoute: typeof AuthenticatedProvidersPipelineRoute
   AuthenticatedSettingsPrivacyRoute: typeof AuthenticatedSettingsPrivacyRoute
   AuthenticatedApplicationsIndexRoute: typeof AuthenticatedApplicationsIndexRoute
   AuthenticatedCasesIndexRoute: typeof AuthenticatedCasesIndexRoute
+  AuthenticatedContractorsIndexRoute: typeof AuthenticatedContractorsIndexRoute
+  AuthenticatedCouncilIndexRoute: typeof AuthenticatedCouncilIndexRoute
   AuthenticatedFundingIndexRoute: typeof AuthenticatedFundingIndexRoute
+  AuthenticatedProvidersIndexRoute: typeof AuthenticatedProvidersIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -1265,16 +1494,27 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedOpportunitiesRoute: AuthenticatedOpportunitiesRoute,
   AuthenticatedProjectsRoute: AuthenticatedProjectsRoute,
+  AuthenticatedReviewRoute: AuthenticatedReviewRoute,
   AuthenticatedAdminIntegrationsRoute: AuthenticatedAdminIntegrationsRoute,
   AuthenticatedAdminReleaseRoute: AuthenticatedAdminReleaseRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedCasesCaseIdRoute: AuthenticatedCasesCaseIdRoute,
+  AuthenticatedContractorsProfileRoute: AuthenticatedContractorsProfileRoute,
+  AuthenticatedCouncilAnalyticsRoute: AuthenticatedCouncilAnalyticsRoute,
+  AuthenticatedCouncilCasesRoute: AuthenticatedCouncilCasesRoute,
+  AuthenticatedCouncilMapRoute: AuthenticatedCouncilMapRoute,
+  AuthenticatedCouncilReportingRoute: AuthenticatedCouncilReportingRoute,
   AuthenticatedFundingStackRoute: AuthenticatedFundingStackRoute,
   AuthenticatedPropertiesNewRoute: AuthenticatedPropertiesNewRoute,
+  AuthenticatedProviderOffersRoute: AuthenticatedProviderOffersRoute,
+  AuthenticatedProvidersPipelineRoute: AuthenticatedProvidersPipelineRoute,
   AuthenticatedSettingsPrivacyRoute: AuthenticatedSettingsPrivacyRoute,
   AuthenticatedApplicationsIndexRoute: AuthenticatedApplicationsIndexRoute,
   AuthenticatedCasesIndexRoute: AuthenticatedCasesIndexRoute,
+  AuthenticatedContractorsIndexRoute: AuthenticatedContractorsIndexRoute,
+  AuthenticatedCouncilIndexRoute: AuthenticatedCouncilIndexRoute,
   AuthenticatedFundingIndexRoute: AuthenticatedFundingIndexRoute,
+  AuthenticatedProvidersIndexRoute: AuthenticatedProvidersIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
