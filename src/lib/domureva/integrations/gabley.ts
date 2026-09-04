@@ -1,0 +1,1 @@
+import {IntegrationAdapter,AdapterResult} from './base'; export class GableyAdapter extends IntegrationAdapter{name='Gabley';async health():Promise<AdapterResult<{status:string}>>{return process.env["GABLEY_API_URL"]?{ok:true,data:{status:'configured'}}:{ok:false,error:'GABLEY_API_URL not configured'}}}
