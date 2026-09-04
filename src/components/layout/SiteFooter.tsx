@@ -70,7 +70,7 @@ function FooterGroup({ title, links }: { title: string; links: readonly (readonl
       <ul className="mt-5 grid gap-3 text-navy-foreground/70">
         {links.map(([label, to]) => (
           <li key={label}>
-            <Link to={to} className="transition-colors hover:text-navy-foreground">{label}</Link>
+            <a href={to} className="transition-colors hover:text-navy-foreground">{label}</a>
           </li>
         ))}
       </ul>
