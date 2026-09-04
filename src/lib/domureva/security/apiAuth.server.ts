@@ -15,29 +15,33 @@ function getBearerToken(request: Request): string | undefined {
   return match?.[1];
 }
 
-export async function requireUser(request: Request): Promise<{ user: User }> {
+type SupabaseAdmin = (typeof import("@/integrations/supabase/client.server"))["supabaseAdmin"];
+
+export async function requireUser(
+  request: Request,
+): Promise<{ user: User; supabaseAdmin: SupabaseAdmin }> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const token = getBearerToken(request);
   if (!token) throw new ApiAuthError("UNAUTHENTICATED", 401);
   const { data, error } = await supabaseAdmin.auth.getUser(token);
   if (error || !data.user) throw new ApiAuthError("UNAUTHENTICATED", 401);
-  return { user: data.user };
+  return { user: data.user, supabaseAdmin };
 }
 
 export async function requireRole(
   request: Request,
-  roles: string[],
-): Promise<{ user: User }> {
-  const { user } = await requireUser(request);
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  roles: string[] | string,
+): Promise<{ user: User; supabaseAdmin: SupabaseAdmin }> {
+  const wanted = Array.isArray(roles) ? roles : [roles];
+  const { user, supabaseAdmin } = await requireUser(request);
   const { data: rows, error } = await supabaseAdmin
     .from("user_roles")
     .select("role")
     .eq("user_id", user.id);
   if (error) throw new ApiAuthError(error.message, 400);
-  const hasRole = (rows ?? []).some((r) => roles.includes(r.role));
+  const hasRole = (rows ?? []).some((r) => wanted.includes(r.role));
   if (!hasRole) throw new ApiAuthError("FORBIDDEN", 403);
-  return { user };
+  return { user, supabaseAdmin };
 }
 
 export function errorResponse(e: unknown, fallbackStatus = 400): Response {
@@ -49,3 +53,4 @@ export function errorResponse(e: unknown, fallbackStatus = 400): Response {
 }
 
 export const requireApiUser = requireUser;
+export const requireApiRole = requireRole;
