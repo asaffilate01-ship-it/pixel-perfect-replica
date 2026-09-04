@@ -50,8 +50,8 @@ type EventRow = {
 
 type ProviderSummary = {
   provider: string;
-  lastEvent?: EventRow;
-  lastSuccess?: EventRow;
+  lastEvent?: EventRow | undefined;
+  lastSuccess?: EventRow | undefined;
   failureCount: number;
 };
 
