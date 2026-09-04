@@ -33,6 +33,7 @@ import { Route as AuthenticatedSettingsPrivacyRouteImport } from './routes/_auth
 import { Route as ApiApplicationPackIndexRouteImport } from './routes/api/application-pack/index'
 import { Route as ApiApplicationPackExportRouteImport } from './routes/api/application-pack/export'
 import { Route as ApiApplicationPackGenerateRouteImport } from './routes/api/application-pack/generate'
+import { Route as ApiBillingEntitlementsRouteImport } from './routes/api/billing/entitlements'
 import { Route as ApiCasesFinancialsRouteImport } from './routes/api/cases/financials'
 import { Route as ApiCasesOutcomeRouteImport } from './routes/api/cases/outcome'
 import { Route as ApiContractsAwardRouteImport } from './routes/api/contracts/award'
@@ -43,6 +44,13 @@ import { Route as ApiIntegrationsEvidenceRouteImport } from './routes/api/integr
 import { Route as ApiIntegrationsPublishQuotesRouteImport } from './routes/api/integrations/publish-quotes'
 import { Route as ApiIntegrationsRetrofitRouteImport } from './routes/api/integrations/retrofit'
 import { Route as ApiIntegrationsSyncRouteImport } from './routes/api/integrations/sync'
+import { Route as ApiNotificationsPreferencesRouteImport } from './routes/api/notifications/preferences'
+import { Route as ApiNotificationsSubscribeRouteImport } from './routes/api/notifications/subscribe'
+import { Route as ApiPaymentsCheckoutRouteImport } from './routes/api/payments/checkout'
+import { Route as ApiPrivacyRequestsRouteImport } from './routes/api/privacy/requests'
+import { Route as ApiProviderOffersIndexRouteImport } from './routes/api/provider-offers/index'
+import { Route as ApiProviderOffersRespondRouteImport } from './routes/api/provider-offers/respond'
+import { Route as ApiProviderRespondRouteImport } from './routes/api/provider/respond'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiQuotesSubmitRouteImport } from './routes/api/quotes/submit'
 import { Route as ApiReportsCouncilRouteImport } from './routes/api/reports/council'
@@ -188,6 +196,11 @@ const ApiApplicationPackGenerateRoute =
     path: '/api/application-pack/generate',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiBillingEntitlementsRoute = ApiBillingEntitlementsRouteImport.update({
+  id: '/api/billing/entitlements',
+  path: '/api/billing/entitlements',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiCasesFinancialsRoute = ApiCasesFinancialsRouteImport.update({
   id: '/api/cases/financials',
   path: '/api/cases/financials',
@@ -237,6 +250,44 @@ const ApiIntegrationsRetrofitRoute = ApiIntegrationsRetrofitRouteImport.update({
 const ApiIntegrationsSyncRoute = ApiIntegrationsSyncRouteImport.update({
   id: '/api/integrations/sync',
   path: '/api/integrations/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiNotificationsPreferencesRoute =
+  ApiNotificationsPreferencesRouteImport.update({
+    id: '/api/notifications/preferences',
+    path: '/api/notifications/preferences',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiNotificationsSubscribeRoute =
+  ApiNotificationsSubscribeRouteImport.update({
+    id: '/api/notifications/subscribe',
+    path: '/api/notifications/subscribe',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPaymentsCheckoutRoute = ApiPaymentsCheckoutRouteImport.update({
+  id: '/api/payments/checkout',
+  path: '/api/payments/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPrivacyRequestsRoute = ApiPrivacyRequestsRouteImport.update({
+  id: '/api/privacy/requests',
+  path: '/api/privacy/requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiProviderOffersIndexRoute = ApiProviderOffersIndexRouteImport.update({
+  id: '/api/provider-offers/',
+  path: '/api/provider-offers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiProviderOffersRespondRoute =
+  ApiProviderOffersRespondRouteImport.update({
+    id: '/api/provider-offers/respond',
+    path: '/api/provider-offers/respond',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiProviderRespondRoute = ApiProviderRespondRouteImport.update({
+  id: '/api/provider/respond',
+  path: '/api/provider/respond',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
@@ -332,6 +383,7 @@ export interface FileRoutesByFullPath {
   '/settings/privacy': typeof AuthenticatedSettingsPrivacyRoute
   '/api/application-pack/export': typeof ApiApplicationPackExportRoute
   '/api/application-pack/generate': typeof ApiApplicationPackGenerateRoute
+  '/api/billing/entitlements': typeof ApiBillingEntitlementsRoute
   '/api/cases/financials': typeof ApiCasesFinancialsRoute
   '/api/cases/outcome': typeof ApiCasesOutcomeRoute
   '/api/contracts/award': typeof ApiContractsAwardRoute
@@ -342,6 +394,12 @@ export interface FileRoutesByFullPath {
   '/api/integrations/publish-quotes': typeof ApiIntegrationsPublishQuotesRoute
   '/api/integrations/retrofit': typeof ApiIntegrationsRetrofitRoute
   '/api/integrations/sync': typeof ApiIntegrationsSyncRoute
+  '/api/notifications/preferences': typeof ApiNotificationsPreferencesRoute
+  '/api/notifications/subscribe': typeof ApiNotificationsSubscribeRoute
+  '/api/payments/checkout': typeof ApiPaymentsCheckoutRoute
+  '/api/privacy/requests': typeof ApiPrivacyRequestsRoute
+  '/api/provider-offers/respond': typeof ApiProviderOffersRespondRoute
+  '/api/provider/respond': typeof ApiProviderRespondRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/quotes/submit': typeof ApiQuotesSubmitRoute
   '/api/reports/council': typeof ApiReportsCouncilRoute
@@ -354,6 +412,7 @@ export interface FileRoutesByFullPath {
   '/cases/': typeof AuthenticatedCasesIndexRoute
   '/funding/': typeof AuthenticatedFundingIndexRoute
   '/api/application-pack/': typeof ApiApplicationPackIndexRoute
+  '/api/provider-offers/': typeof ApiProviderOffersIndexRoute
   '/api/public/integrations/craftvaro-webhook': typeof ApiPublicIntegrationsCraftvaroWebhookRoute
   '/api/public/integrations/dokuvera-webhook': typeof ApiPublicIntegrationsDokuveraWebhookRoute
   '/api/public/integrations/gabley-retrofit-webhook': typeof ApiPublicIntegrationsGableyRetrofitWebhookRoute
@@ -380,6 +439,7 @@ export interface FileRoutesByTo {
   '/settings/privacy': typeof AuthenticatedSettingsPrivacyRoute
   '/api/application-pack/export': typeof ApiApplicationPackExportRoute
   '/api/application-pack/generate': typeof ApiApplicationPackGenerateRoute
+  '/api/billing/entitlements': typeof ApiBillingEntitlementsRoute
   '/api/cases/financials': typeof ApiCasesFinancialsRoute
   '/api/cases/outcome': typeof ApiCasesOutcomeRoute
   '/api/contracts/award': typeof ApiContractsAwardRoute
@@ -390,6 +450,12 @@ export interface FileRoutesByTo {
   '/api/integrations/publish-quotes': typeof ApiIntegrationsPublishQuotesRoute
   '/api/integrations/retrofit': typeof ApiIntegrationsRetrofitRoute
   '/api/integrations/sync': typeof ApiIntegrationsSyncRoute
+  '/api/notifications/preferences': typeof ApiNotificationsPreferencesRoute
+  '/api/notifications/subscribe': typeof ApiNotificationsSubscribeRoute
+  '/api/payments/checkout': typeof ApiPaymentsCheckoutRoute
+  '/api/privacy/requests': typeof ApiPrivacyRequestsRoute
+  '/api/provider-offers/respond': typeof ApiProviderOffersRespondRoute
+  '/api/provider/respond': typeof ApiProviderRespondRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/quotes/submit': typeof ApiQuotesSubmitRoute
   '/api/reports/council': typeof ApiReportsCouncilRoute
@@ -402,6 +468,7 @@ export interface FileRoutesByTo {
   '/cases': typeof AuthenticatedCasesIndexRoute
   '/funding': typeof AuthenticatedFundingIndexRoute
   '/api/application-pack': typeof ApiApplicationPackIndexRoute
+  '/api/provider-offers': typeof ApiProviderOffersIndexRoute
   '/api/public/integrations/craftvaro-webhook': typeof ApiPublicIntegrationsCraftvaroWebhookRoute
   '/api/public/integrations/dokuvera-webhook': typeof ApiPublicIntegrationsDokuveraWebhookRoute
   '/api/public/integrations/gabley-retrofit-webhook': typeof ApiPublicIntegrationsGableyRetrofitWebhookRoute
@@ -430,6 +497,7 @@ export interface FileRoutesById {
   '/_authenticated/settings/privacy': typeof AuthenticatedSettingsPrivacyRoute
   '/api/application-pack/export': typeof ApiApplicationPackExportRoute
   '/api/application-pack/generate': typeof ApiApplicationPackGenerateRoute
+  '/api/billing/entitlements': typeof ApiBillingEntitlementsRoute
   '/api/cases/financials': typeof ApiCasesFinancialsRoute
   '/api/cases/outcome': typeof ApiCasesOutcomeRoute
   '/api/contracts/award': typeof ApiContractsAwardRoute
@@ -440,6 +508,12 @@ export interface FileRoutesById {
   '/api/integrations/publish-quotes': typeof ApiIntegrationsPublishQuotesRoute
   '/api/integrations/retrofit': typeof ApiIntegrationsRetrofitRoute
   '/api/integrations/sync': typeof ApiIntegrationsSyncRoute
+  '/api/notifications/preferences': typeof ApiNotificationsPreferencesRoute
+  '/api/notifications/subscribe': typeof ApiNotificationsSubscribeRoute
+  '/api/payments/checkout': typeof ApiPaymentsCheckoutRoute
+  '/api/privacy/requests': typeof ApiPrivacyRequestsRoute
+  '/api/provider-offers/respond': typeof ApiProviderOffersRespondRoute
+  '/api/provider/respond': typeof ApiProviderRespondRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/quotes/submit': typeof ApiQuotesSubmitRoute
   '/api/reports/council': typeof ApiReportsCouncilRoute
@@ -452,6 +526,7 @@ export interface FileRoutesById {
   '/_authenticated/cases/': typeof AuthenticatedCasesIndexRoute
   '/_authenticated/funding/': typeof AuthenticatedFundingIndexRoute
   '/api/application-pack/': typeof ApiApplicationPackIndexRoute
+  '/api/provider-offers/': typeof ApiProviderOffersIndexRoute
   '/api/public/integrations/craftvaro-webhook': typeof ApiPublicIntegrationsCraftvaroWebhookRoute
   '/api/public/integrations/dokuvera-webhook': typeof ApiPublicIntegrationsDokuveraWebhookRoute
   '/api/public/integrations/gabley-retrofit-webhook': typeof ApiPublicIntegrationsGableyRetrofitWebhookRoute
@@ -480,6 +555,7 @@ export interface FileRouteTypes {
     | '/settings/privacy'
     | '/api/application-pack/export'
     | '/api/application-pack/generate'
+    | '/api/billing/entitlements'
     | '/api/cases/financials'
     | '/api/cases/outcome'
     | '/api/contracts/award'
@@ -490,6 +566,12 @@ export interface FileRouteTypes {
     | '/api/integrations/publish-quotes'
     | '/api/integrations/retrofit'
     | '/api/integrations/sync'
+    | '/api/notifications/preferences'
+    | '/api/notifications/subscribe'
+    | '/api/payments/checkout'
+    | '/api/privacy/requests'
+    | '/api/provider-offers/respond'
+    | '/api/provider/respond'
     | '/api/public/health'
     | '/api/quotes/submit'
     | '/api/reports/council'
@@ -502,6 +584,7 @@ export interface FileRouteTypes {
     | '/cases/'
     | '/funding/'
     | '/api/application-pack/'
+    | '/api/provider-offers/'
     | '/api/public/integrations/craftvaro-webhook'
     | '/api/public/integrations/dokuvera-webhook'
     | '/api/public/integrations/gabley-retrofit-webhook'
@@ -528,6 +611,7 @@ export interface FileRouteTypes {
     | '/settings/privacy'
     | '/api/application-pack/export'
     | '/api/application-pack/generate'
+    | '/api/billing/entitlements'
     | '/api/cases/financials'
     | '/api/cases/outcome'
     | '/api/contracts/award'
@@ -538,6 +622,12 @@ export interface FileRouteTypes {
     | '/api/integrations/publish-quotes'
     | '/api/integrations/retrofit'
     | '/api/integrations/sync'
+    | '/api/notifications/preferences'
+    | '/api/notifications/subscribe'
+    | '/api/payments/checkout'
+    | '/api/privacy/requests'
+    | '/api/provider-offers/respond'
+    | '/api/provider/respond'
     | '/api/public/health'
     | '/api/quotes/submit'
     | '/api/reports/council'
@@ -550,6 +640,7 @@ export interface FileRouteTypes {
     | '/cases'
     | '/funding'
     | '/api/application-pack'
+    | '/api/provider-offers'
     | '/api/public/integrations/craftvaro-webhook'
     | '/api/public/integrations/dokuvera-webhook'
     | '/api/public/integrations/gabley-retrofit-webhook'
@@ -577,6 +668,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/privacy'
     | '/api/application-pack/export'
     | '/api/application-pack/generate'
+    | '/api/billing/entitlements'
     | '/api/cases/financials'
     | '/api/cases/outcome'
     | '/api/contracts/award'
@@ -587,6 +679,12 @@ export interface FileRouteTypes {
     | '/api/integrations/publish-quotes'
     | '/api/integrations/retrofit'
     | '/api/integrations/sync'
+    | '/api/notifications/preferences'
+    | '/api/notifications/subscribe'
+    | '/api/payments/checkout'
+    | '/api/privacy/requests'
+    | '/api/provider-offers/respond'
+    | '/api/provider/respond'
     | '/api/public/health'
     | '/api/quotes/submit'
     | '/api/reports/council'
@@ -599,6 +697,7 @@ export interface FileRouteTypes {
     | '/_authenticated/cases/'
     | '/_authenticated/funding/'
     | '/api/application-pack/'
+    | '/api/provider-offers/'
     | '/api/public/integrations/craftvaro-webhook'
     | '/api/public/integrations/dokuvera-webhook'
     | '/api/public/integrations/gabley-retrofit-webhook'
@@ -616,6 +715,7 @@ export interface RootRouteChildren {
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   ApiApplicationPackExportRoute: typeof ApiApplicationPackExportRoute
   ApiApplicationPackGenerateRoute: typeof ApiApplicationPackGenerateRoute
+  ApiBillingEntitlementsRoute: typeof ApiBillingEntitlementsRoute
   ApiCasesFinancialsRoute: typeof ApiCasesFinancialsRoute
   ApiCasesOutcomeRoute: typeof ApiCasesOutcomeRoute
   ApiContractsAwardRoute: typeof ApiContractsAwardRoute
@@ -626,6 +726,12 @@ export interface RootRouteChildren {
   ApiIntegrationsPublishQuotesRoute: typeof ApiIntegrationsPublishQuotesRoute
   ApiIntegrationsRetrofitRoute: typeof ApiIntegrationsRetrofitRoute
   ApiIntegrationsSyncRoute: typeof ApiIntegrationsSyncRoute
+  ApiNotificationsPreferencesRoute: typeof ApiNotificationsPreferencesRoute
+  ApiNotificationsSubscribeRoute: typeof ApiNotificationsSubscribeRoute
+  ApiPaymentsCheckoutRoute: typeof ApiPaymentsCheckoutRoute
+  ApiPrivacyRequestsRoute: typeof ApiPrivacyRequestsRoute
+  ApiProviderOffersRespondRoute: typeof ApiProviderOffersRespondRoute
+  ApiProviderRespondRoute: typeof ApiProviderRespondRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
   ApiQuotesSubmitRoute: typeof ApiQuotesSubmitRoute
   ApiReportsCouncilRoute: typeof ApiReportsCouncilRoute
@@ -635,6 +741,7 @@ export interface RootRouteChildren {
   ApiWorkflowMatchFundingRoute: typeof ApiWorkflowMatchFundingRoute
   ApiWorkflowRequestQuotesRoute: typeof ApiWorkflowRequestQuotesRoute
   ApiApplicationPackIndexRoute: typeof ApiApplicationPackIndexRoute
+  ApiProviderOffersIndexRoute: typeof ApiProviderOffersIndexRoute
   ApiPublicIntegrationsCraftvaroWebhookRoute: typeof ApiPublicIntegrationsCraftvaroWebhookRoute
   ApiPublicIntegrationsDokuveraWebhookRoute: typeof ApiPublicIntegrationsDokuveraWebhookRoute
   ApiPublicIntegrationsGableyRetrofitWebhookRoute: typeof ApiPublicIntegrationsGableyRetrofitWebhookRoute
@@ -812,6 +919,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiApplicationPackGenerateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/billing/entitlements': {
+      id: '/api/billing/entitlements'
+      path: '/api/billing/entitlements'
+      fullPath: '/api/billing/entitlements'
+      preLoaderRoute: typeof ApiBillingEntitlementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/cases/financials': {
       id: '/api/cases/financials'
       path: '/api/cases/financials'
@@ -880,6 +994,55 @@ declare module '@tanstack/react-router' {
       path: '/api/integrations/sync'
       fullPath: '/api/integrations/sync'
       preLoaderRoute: typeof ApiIntegrationsSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/notifications/preferences': {
+      id: '/api/notifications/preferences'
+      path: '/api/notifications/preferences'
+      fullPath: '/api/notifications/preferences'
+      preLoaderRoute: typeof ApiNotificationsPreferencesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/notifications/subscribe': {
+      id: '/api/notifications/subscribe'
+      path: '/api/notifications/subscribe'
+      fullPath: '/api/notifications/subscribe'
+      preLoaderRoute: typeof ApiNotificationsSubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/payments/checkout': {
+      id: '/api/payments/checkout'
+      path: '/api/payments/checkout'
+      fullPath: '/api/payments/checkout'
+      preLoaderRoute: typeof ApiPaymentsCheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/privacy/requests': {
+      id: '/api/privacy/requests'
+      path: '/api/privacy/requests'
+      fullPath: '/api/privacy/requests'
+      preLoaderRoute: typeof ApiPrivacyRequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/provider-offers/': {
+      id: '/api/provider-offers/'
+      path: '/api/provider-offers'
+      fullPath: '/api/provider-offers/'
+      preLoaderRoute: typeof ApiProviderOffersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/provider-offers/respond': {
+      id: '/api/provider-offers/respond'
+      path: '/api/provider-offers/respond'
+      fullPath: '/api/provider-offers/respond'
+      preLoaderRoute: typeof ApiProviderOffersRespondRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/provider/respond': {
+      id: '/api/provider/respond'
+      path: '/api/provider/respond'
+      fullPath: '/api/provider/respond'
+      preLoaderRoute: typeof ApiProviderRespondRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/health': {
@@ -1023,6 +1186,7 @@ const rootRouteChildren: RootRouteChildren = {
   LegalPrivacyRoute: LegalPrivacyRoute,
   ApiApplicationPackExportRoute: ApiApplicationPackExportRoute,
   ApiApplicationPackGenerateRoute: ApiApplicationPackGenerateRoute,
+  ApiBillingEntitlementsRoute: ApiBillingEntitlementsRoute,
   ApiCasesFinancialsRoute: ApiCasesFinancialsRoute,
   ApiCasesOutcomeRoute: ApiCasesOutcomeRoute,
   ApiContractsAwardRoute: ApiContractsAwardRoute,
@@ -1033,6 +1197,12 @@ const rootRouteChildren: RootRouteChildren = {
   ApiIntegrationsPublishQuotesRoute: ApiIntegrationsPublishQuotesRoute,
   ApiIntegrationsRetrofitRoute: ApiIntegrationsRetrofitRoute,
   ApiIntegrationsSyncRoute: ApiIntegrationsSyncRoute,
+  ApiNotificationsPreferencesRoute: ApiNotificationsPreferencesRoute,
+  ApiNotificationsSubscribeRoute: ApiNotificationsSubscribeRoute,
+  ApiPaymentsCheckoutRoute: ApiPaymentsCheckoutRoute,
+  ApiPrivacyRequestsRoute: ApiPrivacyRequestsRoute,
+  ApiProviderOffersRespondRoute: ApiProviderOffersRespondRoute,
+  ApiProviderRespondRoute: ApiProviderRespondRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
   ApiQuotesSubmitRoute: ApiQuotesSubmitRoute,
   ApiReportsCouncilRoute: ApiReportsCouncilRoute,
@@ -1042,6 +1212,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiWorkflowMatchFundingRoute: ApiWorkflowMatchFundingRoute,
   ApiWorkflowRequestQuotesRoute: ApiWorkflowRequestQuotesRoute,
   ApiApplicationPackIndexRoute: ApiApplicationPackIndexRoute,
+  ApiProviderOffersIndexRoute: ApiProviderOffersIndexRoute,
   ApiPublicIntegrationsCraftvaroWebhookRoute:
     ApiPublicIntegrationsCraftvaroWebhookRoute,
   ApiPublicIntegrationsDokuveraWebhookRoute:

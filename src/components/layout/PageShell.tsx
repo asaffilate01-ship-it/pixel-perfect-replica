@@ -20,10 +20,10 @@ export function PageHeader({
   description,
   actions,
 }: {
-  eyebrow?: string;
+  eyebrow?: string | undefined;
   title: string;
-  description?: string;
-  actions?: ReactNode;
+  description?: string | undefined;
+  actions?: ReactNode | undefined;
 }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-5 border-b border-border pb-6">
@@ -57,8 +57,8 @@ export function StatCard({
 }: {
   label: string;
   value: ReactNode;
-  hint?: string;
-  icon?: LucideIcon;
+  hint?: string | undefined;
+  icon?: LucideIcon | undefined;
 }) {
   return (
     <div className="rounded-2xl border border-border bg-card p-5 shadow-card">

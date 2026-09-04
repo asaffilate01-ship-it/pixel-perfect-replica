@@ -38,15 +38,20 @@ export const Route = createFileRoute("/api/review/rule-change")({
           }
 
           if (body.decision === "reviewed" && queued.scheme_id) {
-            const patch: Record<string, unknown> = {};
             const proposed = (queued.proposed ?? {}) as Record<string, unknown>;
+            const patch: Record<string, unknown> = {
+              status: "reviewed" as const,
+              reviewed_by: user.id,
+              reviewed_at: new Date().toISOString(),
+            };
             for (const f of allowedFields) {
               if (proposed[f] !== undefined) patch[f] = proposed[f];
             }
-            patch['status'] = "reviewed";
-            patch['reviewed_by'] = user.id;
-            patch['reviewed_at'] = new Date().toISOString();
-            const { error } = await supabaseAdmin.from("funding_schemes").update(patch).eq("id", queued.scheme_id);
+            const { error } = await supabaseAdmin
+              .from("funding_schemes")
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              .update(patch as any)
+              .eq("id", queued.scheme_id);
             if (error) throw error;
           }
 

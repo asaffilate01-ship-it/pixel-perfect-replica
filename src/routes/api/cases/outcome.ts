@@ -43,8 +43,8 @@ export const Route = createFileRoute("/api/cases/outcome")({
 
         await supabaseAdmin.from("learning_outcomes").insert({
           case_id: b.data.caseId,
-          outcome_type: "property_returned_to_use",
-          outcome_value: { ...b.data },
+          event: "property_returned_to_use",
+          features: { ...b.data },
         });
 
         return Response.json({ data });

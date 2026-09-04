@@ -29,11 +29,11 @@ export const Route = createFileRoute("/api/cases/financials")({
           .upsert(
             {
               case_id: x.caseId,
-              estimated_works: x.estimatedWorks,
-              approved_funding: x.approvedFunding,
-              owner_contribution: x.ownerContribution,
-              committed_contract_value: x.committedContractValue,
-              paid_to_date: x.paidToDate,
+              estimated_works: x.estimatedWorks ?? null,
+              approved_funding: x.approvedFunding ?? null,
+              owner_contribution: x.ownerContribution ?? null,
+              committed_contract_value: x.committedContractValue ?? null,
+              paid_to_date: x.paidToDate ?? null,
               updated_at: new Date().toISOString(),
             },
             { onConflict: "case_id" },
