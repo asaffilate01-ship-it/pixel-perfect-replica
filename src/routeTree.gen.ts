@@ -12,10 +12,50 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthenticatedApplicationPackRouteImport } from './routes/_authenticated/application-pack'
+import { Route as AuthenticatedCopilotRouteImport } from './routes/_authenticated/copilot'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedOpportunitiesRouteImport } from './routes/_authenticated/opportunities'
+import { Route as AuthenticatedProjectsRouteImport } from './routes/_authenticated/projects'
+import { Route as ApiMessagesRouteImport } from './routes/api/messages'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as LegalCookiesRouteImport } from './routes/legal/cookies'
 import { Route as LegalPrivacyRouteImport } from './routes/legal/privacy'
+import { Route as AuthenticatedAdminIntegrationsRouteImport } from './routes/_authenticated/admin/integrations'
+import { Route as AuthenticatedApplicationsIndexRouteImport } from './routes/_authenticated/applications/index'
+import { Route as AuthenticatedCasesIndexRouteImport } from './routes/_authenticated/cases/index'
+import { Route as AuthenticatedCasesCaseIdRouteImport } from './routes/_authenticated/cases/$caseId'
+import { Route as AuthenticatedFundingIndexRouteImport } from './routes/_authenticated/funding/index'
+import { Route as AuthenticatedFundingStackRouteImport } from './routes/_authenticated/funding/stack'
+import { Route as AuthenticatedPropertiesNewRouteImport } from './routes/_authenticated/properties/new'
+import { Route as AuthenticatedSettingsPrivacyRouteImport } from './routes/_authenticated/settings/privacy'
+import { Route as ApiApplicationPackIndexRouteImport } from './routes/api/application-pack/index'
+import { Route as ApiApplicationPackExportRouteImport } from './routes/api/application-pack/export'
+import { Route as ApiApplicationPackGenerateRouteImport } from './routes/api/application-pack/generate'
+import { Route as ApiCasesFinancialsRouteImport } from './routes/api/cases/financials'
+import { Route as ApiCasesOutcomeRouteImport } from './routes/api/cases/outcome'
+import { Route as ApiContractsAwardRouteImport } from './routes/api/contracts/award'
+import { Route as ApiDocumentsUploadRouteImport } from './routes/api/documents/upload'
+import { Route as ApiFundingOptimiseRouteImport } from './routes/api/funding/optimise'
+import { Route as ApiIntegrationsDiscoverRouteImport } from './routes/api/integrations/discover'
+import { Route as ApiIntegrationsEvidenceRouteImport } from './routes/api/integrations/evidence'
+import { Route as ApiIntegrationsPublishQuotesRouteImport } from './routes/api/integrations/publish-quotes'
+import { Route as ApiIntegrationsRetrofitRouteImport } from './routes/api/integrations/retrofit'
+import { Route as ApiIntegrationsSyncRouteImport } from './routes/api/integrations/sync'
+import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
+import { Route as ApiQuotesSubmitRouteImport } from './routes/api/quotes/submit'
+import { Route as ApiReportsCouncilRouteImport } from './routes/api/reports/council'
+import { Route as ApiReviewRuleChangeRouteImport } from './routes/api/review/rule-change'
+import { Route as ApiWorkflowCompleteMilestoneRouteImport } from './routes/api/workflow/complete-milestone'
+import { Route as ApiWorkflowIntakeRouteImport } from './routes/api/workflow/intake'
+import { Route as ApiWorkflowMatchFundingRouteImport } from './routes/api/workflow/match-funding'
+import { Route as ApiWorkflowRequestQuotesRouteImport } from './routes/api/workflow/request-quotes'
+import { Route as ApiPublicIntegrationsCraftvaroWebhookRouteImport } from './routes/api/public/integrations/craftvaro-webhook'
+import { Route as ApiPublicIntegrationsDokuveraWebhookRouteImport } from './routes/api/public/integrations/dokuvera-webhook'
+import { Route as ApiPublicIntegrationsGableyRetrofitWebhookRouteImport } from './routes/api/public/integrations/gabley-retrofit-webhook'
+import { Route as ApiPublicIntegrationsLeadlensWebhookRouteImport } from './routes/api/public/integrations/leadlens-webhook'
+import { Route as ApiPublicPaymentsStripeWebhookRouteImport } from './routes/api/public/payments/stripe-webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -31,10 +71,43 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedApplicationPackRoute =
+  AuthenticatedApplicationPackRouteImport.update({
+    id: '/application-pack',
+    path: '/application-pack',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedCopilotRoute = AuthenticatedCopilotRouteImport.update({
+  id: '/copilot',
+  path: '/copilot',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedOpportunitiesRoute =
+  AuthenticatedOpportunitiesRouteImport.update({
+    id: '/opportunities',
+    path: '/opportunities',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsRoute = AuthenticatedProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ApiMessagesRoute = ApiMessagesRouteImport.update({
+  id: '/api/messages',
+  path: '/api/messages',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
   id: '/auth/callback',
@@ -51,68 +124,522 @@ const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
   path: '/legal/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminIntegrationsRoute =
+  AuthenticatedAdminIntegrationsRouteImport.update({
+    id: '/admin/integrations',
+    path: '/admin/integrations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedApplicationsIndexRoute =
+  AuthenticatedApplicationsIndexRouteImport.update({
+    id: '/applications/',
+    path: '/applications/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedCasesIndexRoute = AuthenticatedCasesIndexRouteImport.update({
+  id: '/cases/',
+  path: '/cases/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCasesCaseIdRoute =
+  AuthenticatedCasesCaseIdRouteImport.update({
+    id: '/cases/$caseId',
+    path: '/cases/$caseId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedFundingIndexRoute =
+  AuthenticatedFundingIndexRouteImport.update({
+    id: '/funding/',
+    path: '/funding/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedFundingStackRoute =
+  AuthenticatedFundingStackRouteImport.update({
+    id: '/funding/stack',
+    path: '/funding/stack',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPropertiesNewRoute =
+  AuthenticatedPropertiesNewRouteImport.update({
+    id: '/properties/new',
+    path: '/properties/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSettingsPrivacyRoute =
+  AuthenticatedSettingsPrivacyRouteImport.update({
+    id: '/settings/privacy',
+    path: '/settings/privacy',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const ApiApplicationPackIndexRoute = ApiApplicationPackIndexRouteImport.update({
+  id: '/api/application-pack/',
+  path: '/api/application-pack/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiApplicationPackExportRoute =
+  ApiApplicationPackExportRouteImport.update({
+    id: '/api/application-pack/export',
+    path: '/api/application-pack/export',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiApplicationPackGenerateRoute =
+  ApiApplicationPackGenerateRouteImport.update({
+    id: '/api/application-pack/generate',
+    path: '/api/application-pack/generate',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiCasesFinancialsRoute = ApiCasesFinancialsRouteImport.update({
+  id: '/api/cases/financials',
+  path: '/api/cases/financials',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCasesOutcomeRoute = ApiCasesOutcomeRouteImport.update({
+  id: '/api/cases/outcome',
+  path: '/api/cases/outcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiContractsAwardRoute = ApiContractsAwardRouteImport.update({
+  id: '/api/contracts/award',
+  path: '/api/contracts/award',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDocumentsUploadRoute = ApiDocumentsUploadRouteImport.update({
+  id: '/api/documents/upload',
+  path: '/api/documents/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiFundingOptimiseRoute = ApiFundingOptimiseRouteImport.update({
+  id: '/api/funding/optimise',
+  path: '/api/funding/optimise',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiIntegrationsDiscoverRoute = ApiIntegrationsDiscoverRouteImport.update({
+  id: '/api/integrations/discover',
+  path: '/api/integrations/discover',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiIntegrationsEvidenceRoute = ApiIntegrationsEvidenceRouteImport.update({
+  id: '/api/integrations/evidence',
+  path: '/api/integrations/evidence',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiIntegrationsPublishQuotesRoute =
+  ApiIntegrationsPublishQuotesRouteImport.update({
+    id: '/api/integrations/publish-quotes',
+    path: '/api/integrations/publish-quotes',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiIntegrationsRetrofitRoute = ApiIntegrationsRetrofitRouteImport.update({
+  id: '/api/integrations/retrofit',
+  path: '/api/integrations/retrofit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiIntegrationsSyncRoute = ApiIntegrationsSyncRouteImport.update({
+  id: '/api/integrations/sync',
+  path: '/api/integrations/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
+  id: '/api/public/health',
+  path: '/api/public/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiQuotesSubmitRoute = ApiQuotesSubmitRouteImport.update({
+  id: '/api/quotes/submit',
+  path: '/api/quotes/submit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReportsCouncilRoute = ApiReportsCouncilRouteImport.update({
+  id: '/api/reports/council',
+  path: '/api/reports/council',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReviewRuleChangeRoute = ApiReviewRuleChangeRouteImport.update({
+  id: '/api/review/rule-change',
+  path: '/api/review/rule-change',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWorkflowCompleteMilestoneRoute =
+  ApiWorkflowCompleteMilestoneRouteImport.update({
+    id: '/api/workflow/complete-milestone',
+    path: '/api/workflow/complete-milestone',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiWorkflowIntakeRoute = ApiWorkflowIntakeRouteImport.update({
+  id: '/api/workflow/intake',
+  path: '/api/workflow/intake',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWorkflowMatchFundingRoute = ApiWorkflowMatchFundingRouteImport.update({
+  id: '/api/workflow/match-funding',
+  path: '/api/workflow/match-funding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWorkflowRequestQuotesRoute =
+  ApiWorkflowRequestQuotesRouteImport.update({
+    id: '/api/workflow/request-quotes',
+    path: '/api/workflow/request-quotes',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicIntegrationsCraftvaroWebhookRoute =
+  ApiPublicIntegrationsCraftvaroWebhookRouteImport.update({
+    id: '/api/public/integrations/craftvaro-webhook',
+    path: '/api/public/integrations/craftvaro-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicIntegrationsDokuveraWebhookRoute =
+  ApiPublicIntegrationsDokuveraWebhookRouteImport.update({
+    id: '/api/public/integrations/dokuvera-webhook',
+    path: '/api/public/integrations/dokuvera-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicIntegrationsGableyRetrofitWebhookRoute =
+  ApiPublicIntegrationsGableyRetrofitWebhookRouteImport.update({
+    id: '/api/public/integrations/gabley-retrofit-webhook',
+    path: '/api/public/integrations/gabley-retrofit-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicIntegrationsLeadlensWebhookRoute =
+  ApiPublicIntegrationsLeadlensWebhookRouteImport.update({
+    id: '/api/public/integrations/leadlens-webhook',
+    path: '/api/public/integrations/leadlens-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicPaymentsStripeWebhookRoute =
+  ApiPublicPaymentsStripeWebhookRouteImport.update({
+    id: '/api/public/payments/stripe-webhook',
+    path: '/api/public/payments/stripe-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/application-pack': typeof AuthenticatedApplicationPackRoute
+  '/copilot': typeof AuthenticatedCopilotRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/opportunities': typeof AuthenticatedOpportunitiesRoute
+  '/projects': typeof AuthenticatedProjectsRoute
+  '/api/messages': typeof ApiMessagesRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
+  '/admin/integrations': typeof AuthenticatedAdminIntegrationsRoute
+  '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
+  '/funding/stack': typeof AuthenticatedFundingStackRoute
+  '/properties/new': typeof AuthenticatedPropertiesNewRoute
+  '/settings/privacy': typeof AuthenticatedSettingsPrivacyRoute
+  '/api/application-pack/export': typeof ApiApplicationPackExportRoute
+  '/api/application-pack/generate': typeof ApiApplicationPackGenerateRoute
+  '/api/cases/financials': typeof ApiCasesFinancialsRoute
+  '/api/cases/outcome': typeof ApiCasesOutcomeRoute
+  '/api/contracts/award': typeof ApiContractsAwardRoute
+  '/api/documents/upload': typeof ApiDocumentsUploadRoute
+  '/api/funding/optimise': typeof ApiFundingOptimiseRoute
+  '/api/integrations/discover': typeof ApiIntegrationsDiscoverRoute
+  '/api/integrations/evidence': typeof ApiIntegrationsEvidenceRoute
+  '/api/integrations/publish-quotes': typeof ApiIntegrationsPublishQuotesRoute
+  '/api/integrations/retrofit': typeof ApiIntegrationsRetrofitRoute
+  '/api/integrations/sync': typeof ApiIntegrationsSyncRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
+  '/api/quotes/submit': typeof ApiQuotesSubmitRoute
+  '/api/reports/council': typeof ApiReportsCouncilRoute
+  '/api/review/rule-change': typeof ApiReviewRuleChangeRoute
+  '/api/workflow/complete-milestone': typeof ApiWorkflowCompleteMilestoneRoute
+  '/api/workflow/intake': typeof ApiWorkflowIntakeRoute
+  '/api/workflow/match-funding': typeof ApiWorkflowMatchFundingRoute
+  '/api/workflow/request-quotes': typeof ApiWorkflowRequestQuotesRoute
+  '/applications/': typeof AuthenticatedApplicationsIndexRoute
+  '/cases/': typeof AuthenticatedCasesIndexRoute
+  '/funding/': typeof AuthenticatedFundingIndexRoute
+  '/api/application-pack/': typeof ApiApplicationPackIndexRoute
+  '/api/public/integrations/craftvaro-webhook': typeof ApiPublicIntegrationsCraftvaroWebhookRoute
+  '/api/public/integrations/dokuvera-webhook': typeof ApiPublicIntegrationsDokuveraWebhookRoute
+  '/api/public/integrations/gabley-retrofit-webhook': typeof ApiPublicIntegrationsGableyRetrofitWebhookRoute
+  '/api/public/integrations/leadlens-webhook': typeof ApiPublicIntegrationsLeadlensWebhookRoute
+  '/api/public/payments/stripe-webhook': typeof ApiPublicPaymentsStripeWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/application-pack': typeof AuthenticatedApplicationPackRoute
+  '/copilot': typeof AuthenticatedCopilotRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/opportunities': typeof AuthenticatedOpportunitiesRoute
+  '/projects': typeof AuthenticatedProjectsRoute
+  '/api/messages': typeof ApiMessagesRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
+  '/admin/integrations': typeof AuthenticatedAdminIntegrationsRoute
+  '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
+  '/funding/stack': typeof AuthenticatedFundingStackRoute
+  '/properties/new': typeof AuthenticatedPropertiesNewRoute
+  '/settings/privacy': typeof AuthenticatedSettingsPrivacyRoute
+  '/api/application-pack/export': typeof ApiApplicationPackExportRoute
+  '/api/application-pack/generate': typeof ApiApplicationPackGenerateRoute
+  '/api/cases/financials': typeof ApiCasesFinancialsRoute
+  '/api/cases/outcome': typeof ApiCasesOutcomeRoute
+  '/api/contracts/award': typeof ApiContractsAwardRoute
+  '/api/documents/upload': typeof ApiDocumentsUploadRoute
+  '/api/funding/optimise': typeof ApiFundingOptimiseRoute
+  '/api/integrations/discover': typeof ApiIntegrationsDiscoverRoute
+  '/api/integrations/evidence': typeof ApiIntegrationsEvidenceRoute
+  '/api/integrations/publish-quotes': typeof ApiIntegrationsPublishQuotesRoute
+  '/api/integrations/retrofit': typeof ApiIntegrationsRetrofitRoute
+  '/api/integrations/sync': typeof ApiIntegrationsSyncRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
+  '/api/quotes/submit': typeof ApiQuotesSubmitRoute
+  '/api/reports/council': typeof ApiReportsCouncilRoute
+  '/api/review/rule-change': typeof ApiReviewRuleChangeRoute
+  '/api/workflow/complete-milestone': typeof ApiWorkflowCompleteMilestoneRoute
+  '/api/workflow/intake': typeof ApiWorkflowIntakeRoute
+  '/api/workflow/match-funding': typeof ApiWorkflowMatchFundingRoute
+  '/api/workflow/request-quotes': typeof ApiWorkflowRequestQuotesRoute
+  '/applications': typeof AuthenticatedApplicationsIndexRoute
+  '/cases': typeof AuthenticatedCasesIndexRoute
+  '/funding': typeof AuthenticatedFundingIndexRoute
+  '/api/application-pack': typeof ApiApplicationPackIndexRoute
+  '/api/public/integrations/craftvaro-webhook': typeof ApiPublicIntegrationsCraftvaroWebhookRoute
+  '/api/public/integrations/dokuvera-webhook': typeof ApiPublicIntegrationsDokuveraWebhookRoute
+  '/api/public/integrations/gabley-retrofit-webhook': typeof ApiPublicIntegrationsGableyRetrofitWebhookRoute
+  '/api/public/integrations/leadlens-webhook': typeof ApiPublicIntegrationsLeadlensWebhookRoute
+  '/api/public/payments/stripe-webhook': typeof ApiPublicPaymentsStripeWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/_authenticated/application-pack': typeof AuthenticatedApplicationPackRoute
+  '/_authenticated/copilot': typeof AuthenticatedCopilotRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/opportunities': typeof AuthenticatedOpportunitiesRoute
+  '/_authenticated/projects': typeof AuthenticatedProjectsRoute
+  '/api/messages': typeof ApiMessagesRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
+  '/_authenticated/admin/integrations': typeof AuthenticatedAdminIntegrationsRoute
+  '/_authenticated/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
+  '/_authenticated/funding/stack': typeof AuthenticatedFundingStackRoute
+  '/_authenticated/properties/new': typeof AuthenticatedPropertiesNewRoute
+  '/_authenticated/settings/privacy': typeof AuthenticatedSettingsPrivacyRoute
+  '/api/application-pack/export': typeof ApiApplicationPackExportRoute
+  '/api/application-pack/generate': typeof ApiApplicationPackGenerateRoute
+  '/api/cases/financials': typeof ApiCasesFinancialsRoute
+  '/api/cases/outcome': typeof ApiCasesOutcomeRoute
+  '/api/contracts/award': typeof ApiContractsAwardRoute
+  '/api/documents/upload': typeof ApiDocumentsUploadRoute
+  '/api/funding/optimise': typeof ApiFundingOptimiseRoute
+  '/api/integrations/discover': typeof ApiIntegrationsDiscoverRoute
+  '/api/integrations/evidence': typeof ApiIntegrationsEvidenceRoute
+  '/api/integrations/publish-quotes': typeof ApiIntegrationsPublishQuotesRoute
+  '/api/integrations/retrofit': typeof ApiIntegrationsRetrofitRoute
+  '/api/integrations/sync': typeof ApiIntegrationsSyncRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
+  '/api/quotes/submit': typeof ApiQuotesSubmitRoute
+  '/api/reports/council': typeof ApiReportsCouncilRoute
+  '/api/review/rule-change': typeof ApiReviewRuleChangeRoute
+  '/api/workflow/complete-milestone': typeof ApiWorkflowCompleteMilestoneRoute
+  '/api/workflow/intake': typeof ApiWorkflowIntakeRoute
+  '/api/workflow/match-funding': typeof ApiWorkflowMatchFundingRoute
+  '/api/workflow/request-quotes': typeof ApiWorkflowRequestQuotesRoute
+  '/_authenticated/applications/': typeof AuthenticatedApplicationsIndexRoute
+  '/_authenticated/cases/': typeof AuthenticatedCasesIndexRoute
+  '/_authenticated/funding/': typeof AuthenticatedFundingIndexRoute
+  '/api/application-pack/': typeof ApiApplicationPackIndexRoute
+  '/api/public/integrations/craftvaro-webhook': typeof ApiPublicIntegrationsCraftvaroWebhookRoute
+  '/api/public/integrations/dokuvera-webhook': typeof ApiPublicIntegrationsDokuveraWebhookRoute
+  '/api/public/integrations/gabley-retrofit-webhook': typeof ApiPublicIntegrationsGableyRetrofitWebhookRoute
+  '/api/public/integrations/leadlens-webhook': typeof ApiPublicIntegrationsLeadlensWebhookRoute
+  '/api/public/payments/stripe-webhook': typeof ApiPublicPaymentsStripeWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/login'
+    | '/application-pack'
+    | '/copilot'
     | '/dashboard'
+    | '/notifications'
+    | '/opportunities'
+    | '/projects'
+    | '/api/messages'
     | '/auth/callback'
     | '/legal/cookies'
     | '/legal/privacy'
+    | '/admin/integrations'
+    | '/cases/$caseId'
+    | '/funding/stack'
+    | '/properties/new'
+    | '/settings/privacy'
+    | '/api/application-pack/export'
+    | '/api/application-pack/generate'
+    | '/api/cases/financials'
+    | '/api/cases/outcome'
+    | '/api/contracts/award'
+    | '/api/documents/upload'
+    | '/api/funding/optimise'
+    | '/api/integrations/discover'
+    | '/api/integrations/evidence'
+    | '/api/integrations/publish-quotes'
+    | '/api/integrations/retrofit'
+    | '/api/integrations/sync'
+    | '/api/public/health'
+    | '/api/quotes/submit'
+    | '/api/reports/council'
+    | '/api/review/rule-change'
+    | '/api/workflow/complete-milestone'
+    | '/api/workflow/intake'
+    | '/api/workflow/match-funding'
+    | '/api/workflow/request-quotes'
+    | '/applications/'
+    | '/cases/'
+    | '/funding/'
+    | '/api/application-pack/'
+    | '/api/public/integrations/craftvaro-webhook'
+    | '/api/public/integrations/dokuvera-webhook'
+    | '/api/public/integrations/gabley-retrofit-webhook'
+    | '/api/public/integrations/leadlens-webhook'
+    | '/api/public/payments/stripe-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
+    | '/application-pack'
+    | '/copilot'
     | '/dashboard'
+    | '/notifications'
+    | '/opportunities'
+    | '/projects'
+    | '/api/messages'
     | '/auth/callback'
     | '/legal/cookies'
     | '/legal/privacy'
+    | '/admin/integrations'
+    | '/cases/$caseId'
+    | '/funding/stack'
+    | '/properties/new'
+    | '/settings/privacy'
+    | '/api/application-pack/export'
+    | '/api/application-pack/generate'
+    | '/api/cases/financials'
+    | '/api/cases/outcome'
+    | '/api/contracts/award'
+    | '/api/documents/upload'
+    | '/api/funding/optimise'
+    | '/api/integrations/discover'
+    | '/api/integrations/evidence'
+    | '/api/integrations/publish-quotes'
+    | '/api/integrations/retrofit'
+    | '/api/integrations/sync'
+    | '/api/public/health'
+    | '/api/quotes/submit'
+    | '/api/reports/council'
+    | '/api/review/rule-change'
+    | '/api/workflow/complete-milestone'
+    | '/api/workflow/intake'
+    | '/api/workflow/match-funding'
+    | '/api/workflow/request-quotes'
+    | '/applications'
+    | '/cases'
+    | '/funding'
+    | '/api/application-pack'
+    | '/api/public/integrations/craftvaro-webhook'
+    | '/api/public/integrations/dokuvera-webhook'
+    | '/api/public/integrations/gabley-retrofit-webhook'
+    | '/api/public/integrations/leadlens-webhook'
+    | '/api/public/payments/stripe-webhook'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/login'
+    | '/_authenticated/application-pack'
+    | '/_authenticated/copilot'
     | '/_authenticated/dashboard'
+    | '/_authenticated/notifications'
+    | '/_authenticated/opportunities'
+    | '/_authenticated/projects'
+    | '/api/messages'
     | '/auth/callback'
     | '/legal/cookies'
     | '/legal/privacy'
+    | '/_authenticated/admin/integrations'
+    | '/_authenticated/cases/$caseId'
+    | '/_authenticated/funding/stack'
+    | '/_authenticated/properties/new'
+    | '/_authenticated/settings/privacy'
+    | '/api/application-pack/export'
+    | '/api/application-pack/generate'
+    | '/api/cases/financials'
+    | '/api/cases/outcome'
+    | '/api/contracts/award'
+    | '/api/documents/upload'
+    | '/api/funding/optimise'
+    | '/api/integrations/discover'
+    | '/api/integrations/evidence'
+    | '/api/integrations/publish-quotes'
+    | '/api/integrations/retrofit'
+    | '/api/integrations/sync'
+    | '/api/public/health'
+    | '/api/quotes/submit'
+    | '/api/reports/council'
+    | '/api/review/rule-change'
+    | '/api/workflow/complete-milestone'
+    | '/api/workflow/intake'
+    | '/api/workflow/match-funding'
+    | '/api/workflow/request-quotes'
+    | '/_authenticated/applications/'
+    | '/_authenticated/cases/'
+    | '/_authenticated/funding/'
+    | '/api/application-pack/'
+    | '/api/public/integrations/craftvaro-webhook'
+    | '/api/public/integrations/dokuvera-webhook'
+    | '/api/public/integrations/gabley-retrofit-webhook'
+    | '/api/public/integrations/leadlens-webhook'
+    | '/api/public/payments/stripe-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
+  ApiMessagesRoute: typeof ApiMessagesRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   LegalCookiesRoute: typeof LegalCookiesRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
+  ApiApplicationPackExportRoute: typeof ApiApplicationPackExportRoute
+  ApiApplicationPackGenerateRoute: typeof ApiApplicationPackGenerateRoute
+  ApiCasesFinancialsRoute: typeof ApiCasesFinancialsRoute
+  ApiCasesOutcomeRoute: typeof ApiCasesOutcomeRoute
+  ApiContractsAwardRoute: typeof ApiContractsAwardRoute
+  ApiDocumentsUploadRoute: typeof ApiDocumentsUploadRoute
+  ApiFundingOptimiseRoute: typeof ApiFundingOptimiseRoute
+  ApiIntegrationsDiscoverRoute: typeof ApiIntegrationsDiscoverRoute
+  ApiIntegrationsEvidenceRoute: typeof ApiIntegrationsEvidenceRoute
+  ApiIntegrationsPublishQuotesRoute: typeof ApiIntegrationsPublishQuotesRoute
+  ApiIntegrationsRetrofitRoute: typeof ApiIntegrationsRetrofitRoute
+  ApiIntegrationsSyncRoute: typeof ApiIntegrationsSyncRoute
+  ApiPublicHealthRoute: typeof ApiPublicHealthRoute
+  ApiQuotesSubmitRoute: typeof ApiQuotesSubmitRoute
+  ApiReportsCouncilRoute: typeof ApiReportsCouncilRoute
+  ApiReviewRuleChangeRoute: typeof ApiReviewRuleChangeRoute
+  ApiWorkflowCompleteMilestoneRoute: typeof ApiWorkflowCompleteMilestoneRoute
+  ApiWorkflowIntakeRoute: typeof ApiWorkflowIntakeRoute
+  ApiWorkflowMatchFundingRoute: typeof ApiWorkflowMatchFundingRoute
+  ApiWorkflowRequestQuotesRoute: typeof ApiWorkflowRequestQuotesRoute
+  ApiApplicationPackIndexRoute: typeof ApiApplicationPackIndexRoute
+  ApiPublicIntegrationsCraftvaroWebhookRoute: typeof ApiPublicIntegrationsCraftvaroWebhookRoute
+  ApiPublicIntegrationsDokuveraWebhookRoute: typeof ApiPublicIntegrationsDokuveraWebhookRoute
+  ApiPublicIntegrationsGableyRetrofitWebhookRoute: typeof ApiPublicIntegrationsGableyRetrofitWebhookRoute
+  ApiPublicIntegrationsLeadlensWebhookRoute: typeof ApiPublicIntegrationsLeadlensWebhookRoute
+  ApiPublicPaymentsStripeWebhookRoute: typeof ApiPublicPaymentsStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -138,12 +665,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/application-pack': {
+      id: '/_authenticated/application-pack'
+      path: '/application-pack'
+      fullPath: '/application-pack'
+      preLoaderRoute: typeof AuthenticatedApplicationPackRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/copilot': {
+      id: '/_authenticated/copilot'
+      path: '/copilot'
+      fullPath: '/copilot'
+      preLoaderRoute: typeof AuthenticatedCopilotRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/opportunities': {
+      id: '/_authenticated/opportunities'
+      path: '/opportunities'
+      fullPath: '/opportunities'
+      preLoaderRoute: typeof AuthenticatedOpportunitiesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects': {
+      id: '/_authenticated/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof AuthenticatedProjectsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/messages': {
+      id: '/api/messages'
+      path: '/api/messages'
+      fullPath: '/api/messages'
+      preLoaderRoute: typeof ApiMessagesRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/auth/callback': {
       id: '/auth/callback'
@@ -166,15 +735,279 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LegalPrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/integrations': {
+      id: '/_authenticated/admin/integrations'
+      path: '/admin/integrations'
+      fullPath: '/admin/integrations'
+      preLoaderRoute: typeof AuthenticatedAdminIntegrationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/applications/': {
+      id: '/_authenticated/applications/'
+      path: '/applications'
+      fullPath: '/applications/'
+      preLoaderRoute: typeof AuthenticatedApplicationsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/cases/': {
+      id: '/_authenticated/cases/'
+      path: '/cases'
+      fullPath: '/cases/'
+      preLoaderRoute: typeof AuthenticatedCasesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/cases/$caseId': {
+      id: '/_authenticated/cases/$caseId'
+      path: '/cases/$caseId'
+      fullPath: '/cases/$caseId'
+      preLoaderRoute: typeof AuthenticatedCasesCaseIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/funding/': {
+      id: '/_authenticated/funding/'
+      path: '/funding'
+      fullPath: '/funding/'
+      preLoaderRoute: typeof AuthenticatedFundingIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/funding/stack': {
+      id: '/_authenticated/funding/stack'
+      path: '/funding/stack'
+      fullPath: '/funding/stack'
+      preLoaderRoute: typeof AuthenticatedFundingStackRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/properties/new': {
+      id: '/_authenticated/properties/new'
+      path: '/properties/new'
+      fullPath: '/properties/new'
+      preLoaderRoute: typeof AuthenticatedPropertiesNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/settings/privacy': {
+      id: '/_authenticated/settings/privacy'
+      path: '/settings/privacy'
+      fullPath: '/settings/privacy'
+      preLoaderRoute: typeof AuthenticatedSettingsPrivacyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/application-pack/': {
+      id: '/api/application-pack/'
+      path: '/api/application-pack'
+      fullPath: '/api/application-pack/'
+      preLoaderRoute: typeof ApiApplicationPackIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/application-pack/export': {
+      id: '/api/application-pack/export'
+      path: '/api/application-pack/export'
+      fullPath: '/api/application-pack/export'
+      preLoaderRoute: typeof ApiApplicationPackExportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/application-pack/generate': {
+      id: '/api/application-pack/generate'
+      path: '/api/application-pack/generate'
+      fullPath: '/api/application-pack/generate'
+      preLoaderRoute: typeof ApiApplicationPackGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/cases/financials': {
+      id: '/api/cases/financials'
+      path: '/api/cases/financials'
+      fullPath: '/api/cases/financials'
+      preLoaderRoute: typeof ApiCasesFinancialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/cases/outcome': {
+      id: '/api/cases/outcome'
+      path: '/api/cases/outcome'
+      fullPath: '/api/cases/outcome'
+      preLoaderRoute: typeof ApiCasesOutcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/contracts/award': {
+      id: '/api/contracts/award'
+      path: '/api/contracts/award'
+      fullPath: '/api/contracts/award'
+      preLoaderRoute: typeof ApiContractsAwardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/documents/upload': {
+      id: '/api/documents/upload'
+      path: '/api/documents/upload'
+      fullPath: '/api/documents/upload'
+      preLoaderRoute: typeof ApiDocumentsUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/funding/optimise': {
+      id: '/api/funding/optimise'
+      path: '/api/funding/optimise'
+      fullPath: '/api/funding/optimise'
+      preLoaderRoute: typeof ApiFundingOptimiseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/integrations/discover': {
+      id: '/api/integrations/discover'
+      path: '/api/integrations/discover'
+      fullPath: '/api/integrations/discover'
+      preLoaderRoute: typeof ApiIntegrationsDiscoverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/integrations/evidence': {
+      id: '/api/integrations/evidence'
+      path: '/api/integrations/evidence'
+      fullPath: '/api/integrations/evidence'
+      preLoaderRoute: typeof ApiIntegrationsEvidenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/integrations/publish-quotes': {
+      id: '/api/integrations/publish-quotes'
+      path: '/api/integrations/publish-quotes'
+      fullPath: '/api/integrations/publish-quotes'
+      preLoaderRoute: typeof ApiIntegrationsPublishQuotesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/integrations/retrofit': {
+      id: '/api/integrations/retrofit'
+      path: '/api/integrations/retrofit'
+      fullPath: '/api/integrations/retrofit'
+      preLoaderRoute: typeof ApiIntegrationsRetrofitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/integrations/sync': {
+      id: '/api/integrations/sync'
+      path: '/api/integrations/sync'
+      fullPath: '/api/integrations/sync'
+      preLoaderRoute: typeof ApiIntegrationsSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/health': {
+      id: '/api/public/health'
+      path: '/api/public/health'
+      fullPath: '/api/public/health'
+      preLoaderRoute: typeof ApiPublicHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/quotes/submit': {
+      id: '/api/quotes/submit'
+      path: '/api/quotes/submit'
+      fullPath: '/api/quotes/submit'
+      preLoaderRoute: typeof ApiQuotesSubmitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reports/council': {
+      id: '/api/reports/council'
+      path: '/api/reports/council'
+      fullPath: '/api/reports/council'
+      preLoaderRoute: typeof ApiReportsCouncilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/review/rule-change': {
+      id: '/api/review/rule-change'
+      path: '/api/review/rule-change'
+      fullPath: '/api/review/rule-change'
+      preLoaderRoute: typeof ApiReviewRuleChangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/workflow/complete-milestone': {
+      id: '/api/workflow/complete-milestone'
+      path: '/api/workflow/complete-milestone'
+      fullPath: '/api/workflow/complete-milestone'
+      preLoaderRoute: typeof ApiWorkflowCompleteMilestoneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/workflow/intake': {
+      id: '/api/workflow/intake'
+      path: '/api/workflow/intake'
+      fullPath: '/api/workflow/intake'
+      preLoaderRoute: typeof ApiWorkflowIntakeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/workflow/match-funding': {
+      id: '/api/workflow/match-funding'
+      path: '/api/workflow/match-funding'
+      fullPath: '/api/workflow/match-funding'
+      preLoaderRoute: typeof ApiWorkflowMatchFundingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/workflow/request-quotes': {
+      id: '/api/workflow/request-quotes'
+      path: '/api/workflow/request-quotes'
+      fullPath: '/api/workflow/request-quotes'
+      preLoaderRoute: typeof ApiWorkflowRequestQuotesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/integrations/craftvaro-webhook': {
+      id: '/api/public/integrations/craftvaro-webhook'
+      path: '/api/public/integrations/craftvaro-webhook'
+      fullPath: '/api/public/integrations/craftvaro-webhook'
+      preLoaderRoute: typeof ApiPublicIntegrationsCraftvaroWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/integrations/dokuvera-webhook': {
+      id: '/api/public/integrations/dokuvera-webhook'
+      path: '/api/public/integrations/dokuvera-webhook'
+      fullPath: '/api/public/integrations/dokuvera-webhook'
+      preLoaderRoute: typeof ApiPublicIntegrationsDokuveraWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/integrations/gabley-retrofit-webhook': {
+      id: '/api/public/integrations/gabley-retrofit-webhook'
+      path: '/api/public/integrations/gabley-retrofit-webhook'
+      fullPath: '/api/public/integrations/gabley-retrofit-webhook'
+      preLoaderRoute: typeof ApiPublicIntegrationsGableyRetrofitWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/integrations/leadlens-webhook': {
+      id: '/api/public/integrations/leadlens-webhook'
+      path: '/api/public/integrations/leadlens-webhook'
+      fullPath: '/api/public/integrations/leadlens-webhook'
+      preLoaderRoute: typeof ApiPublicIntegrationsLeadlensWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/payments/stripe-webhook': {
+      id: '/api/public/payments/stripe-webhook'
+      path: '/api/public/payments/stripe-webhook'
+      fullPath: '/api/public/payments/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicPaymentsStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedApplicationPackRoute: typeof AuthenticatedApplicationPackRoute
+  AuthenticatedCopilotRoute: typeof AuthenticatedCopilotRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedOpportunitiesRoute: typeof AuthenticatedOpportunitiesRoute
+  AuthenticatedProjectsRoute: typeof AuthenticatedProjectsRoute
+  AuthenticatedAdminIntegrationsRoute: typeof AuthenticatedAdminIntegrationsRoute
+  AuthenticatedCasesCaseIdRoute: typeof AuthenticatedCasesCaseIdRoute
+  AuthenticatedFundingStackRoute: typeof AuthenticatedFundingStackRoute
+  AuthenticatedPropertiesNewRoute: typeof AuthenticatedPropertiesNewRoute
+  AuthenticatedSettingsPrivacyRoute: typeof AuthenticatedSettingsPrivacyRoute
+  AuthenticatedApplicationsIndexRoute: typeof AuthenticatedApplicationsIndexRoute
+  AuthenticatedCasesIndexRoute: typeof AuthenticatedCasesIndexRoute
+  AuthenticatedFundingIndexRoute: typeof AuthenticatedFundingIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedApplicationPackRoute: AuthenticatedApplicationPackRoute,
+  AuthenticatedCopilotRoute: AuthenticatedCopilotRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedOpportunitiesRoute: AuthenticatedOpportunitiesRoute,
+  AuthenticatedProjectsRoute: AuthenticatedProjectsRoute,
+  AuthenticatedAdminIntegrationsRoute: AuthenticatedAdminIntegrationsRoute,
+  AuthenticatedCasesCaseIdRoute: AuthenticatedCasesCaseIdRoute,
+  AuthenticatedFundingStackRoute: AuthenticatedFundingStackRoute,
+  AuthenticatedPropertiesNewRoute: AuthenticatedPropertiesNewRoute,
+  AuthenticatedSettingsPrivacyRoute: AuthenticatedSettingsPrivacyRoute,
+  AuthenticatedApplicationsIndexRoute: AuthenticatedApplicationsIndexRoute,
+  AuthenticatedCasesIndexRoute: AuthenticatedCasesIndexRoute,
+  AuthenticatedFundingIndexRoute: AuthenticatedFundingIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -184,9 +1017,40 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   LoginRoute: LoginRoute,
+  ApiMessagesRoute: ApiMessagesRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   LegalCookiesRoute: LegalCookiesRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
+  ApiApplicationPackExportRoute: ApiApplicationPackExportRoute,
+  ApiApplicationPackGenerateRoute: ApiApplicationPackGenerateRoute,
+  ApiCasesFinancialsRoute: ApiCasesFinancialsRoute,
+  ApiCasesOutcomeRoute: ApiCasesOutcomeRoute,
+  ApiContractsAwardRoute: ApiContractsAwardRoute,
+  ApiDocumentsUploadRoute: ApiDocumentsUploadRoute,
+  ApiFundingOptimiseRoute: ApiFundingOptimiseRoute,
+  ApiIntegrationsDiscoverRoute: ApiIntegrationsDiscoverRoute,
+  ApiIntegrationsEvidenceRoute: ApiIntegrationsEvidenceRoute,
+  ApiIntegrationsPublishQuotesRoute: ApiIntegrationsPublishQuotesRoute,
+  ApiIntegrationsRetrofitRoute: ApiIntegrationsRetrofitRoute,
+  ApiIntegrationsSyncRoute: ApiIntegrationsSyncRoute,
+  ApiPublicHealthRoute: ApiPublicHealthRoute,
+  ApiQuotesSubmitRoute: ApiQuotesSubmitRoute,
+  ApiReportsCouncilRoute: ApiReportsCouncilRoute,
+  ApiReviewRuleChangeRoute: ApiReviewRuleChangeRoute,
+  ApiWorkflowCompleteMilestoneRoute: ApiWorkflowCompleteMilestoneRoute,
+  ApiWorkflowIntakeRoute: ApiWorkflowIntakeRoute,
+  ApiWorkflowMatchFundingRoute: ApiWorkflowMatchFundingRoute,
+  ApiWorkflowRequestQuotesRoute: ApiWorkflowRequestQuotesRoute,
+  ApiApplicationPackIndexRoute: ApiApplicationPackIndexRoute,
+  ApiPublicIntegrationsCraftvaroWebhookRoute:
+    ApiPublicIntegrationsCraftvaroWebhookRoute,
+  ApiPublicIntegrationsDokuveraWebhookRoute:
+    ApiPublicIntegrationsDokuveraWebhookRoute,
+  ApiPublicIntegrationsGableyRetrofitWebhookRoute:
+    ApiPublicIntegrationsGableyRetrofitWebhookRoute,
+  ApiPublicIntegrationsLeadlensWebhookRoute:
+    ApiPublicIntegrationsLeadlensWebhookRoute,
+  ApiPublicPaymentsStripeWebhookRoute: ApiPublicPaymentsStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
