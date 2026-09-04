@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ShieldCheck } from "lucide-react";
+import { ArrowRight, FileCheck2, ShieldCheck, Sparkles } from "lucide-react";
 
-import { Container, PageHeader } from "@/components/layout/PageShell";
+import { Container } from "@/components/layout/PageShell";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -10,134 +10,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { CASE_STAGES, progressFor, type CaseStage } from "@/lib/domureva/workflow/stages";
 
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
-  head: () => ({
-    meta: [
-      { title: "Case | DOMUREVA" },
-      {
-        name: "description",
-        content: "Track a single property delivery case: journey progress, Reva's recommendation and governance notes.",
-      },
-      { property: "og:title", content: "Case | DOMUREVA" },
-      { property: "og:description", content: "Journey progress and next actions for one property case." },
-    ],
-  }),
-  component: CaseDetailPage,
-});
-
-type CaseRow = {
-  id: string;
-  status: string;
-  created_at: string;
-  properties: { postcode: string; address_line: string | null } | null;
-};
-
-function resolveStage(status: string): CaseStage {
-  return (CASE_STAGES as readonly string[]).includes(status) ? (status as CaseStage) : "funding";
-}
-
-function CaseDetailPage() {
-  const { caseId } = Route.useParams();
-
-  const caseQuery = useQuery({
-    queryKey: ["cases", caseId],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("cases")
-        .select("id, status, created_at, properties(postcode, address_line)")
-        .eq("id", caseId)
-        .maybeSingle();
-      if (error) throw error;
-      return data as unknown as CaseRow | null;
-    },
-  });
-
-  if (caseQuery.isLoading) {
-    return (
-      <Container>
-        <Skeleton className="h-10 w-64" />
-        <Skeleton className="mt-6 h-40 w-full" />
-      </Container>
-    );
-  }
-
-  if (caseQuery.isError || !caseQuery.data) {
-    return (
-      <Container>
-        <div className="rounded-2xl border border-border bg-card p-10 text-center shadow-card">
-          <p className="font-display text-lg font-bold text-primary">Case not found</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            It may have been removed, or you don't have access to it.
-          </p>
-          <Button asChild className="mt-5">
-            <Link to="/cases">Back to cases</Link>
-          </Button>
-        </div>
-      </Container>
-    );
-  }
-
-  const record = caseQuery.data;
-  const stage = resolveStage(record.status);
-  const progress = progressFor(stage);
-
-  return (
-    <Container>
-      <PageHeader
-        eyebrow={`Case ${record.id.slice(0, 8).toUpperCase()}`}
-        title="Property delivery case"
-        description={record.properties?.address_line ?? record.properties?.postcode ?? undefined}
-      />
-
-      <div className="mt-8 rounded-2xl border border-border bg-card p-6 shadow-card">
-        <div className="flex items-center justify-between">
-          <p className="font-semibold text-primary">Journey progress</p>
-          <span className="text-sm font-semibold text-accent">{progress}%</span>
-        </div>
-        <Progress value={progress} className="mt-3" />
-        <div className="mt-4 flex flex-wrap gap-2">
-          {CASE_STAGES.map((s) => (
-            <span
-              key={s}
-              className={`rounded-full border px-3 py-1 text-xs font-semibold capitalize ${
-                s === stage
-                  ? "border-transparent bg-navy text-navy-foreground"
-                  : "border-border text-muted-foreground"
-              }`}
-            >
-              {s}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-        <section className="rounded-2xl border border-border bg-card p-6 shadow-card">
-          <h2 className="font-display text-lg font-bold text-primary">Reva recommendation</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Funding rules have been matched. Verify the evidence pack and prepare the application
-            before opening contractor quotes.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Button asChild className="bg-amber text-amber-foreground hover:bg-amber/90">
-              <Link to="/application-pack">Prepare application</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link to="/applications">Review evidence</Link>
-            </Button>
-          </div>
-        </section>
-
-        <aside className="rounded-2xl border border-border bg-card p-6 shadow-card">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="size-5 text-accent" />
-            <h2 className="font-display text-lg font-bold text-primary">Governance</h2>
-          </div>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Funding decisions use reviewed source rules only. AI rankings can improve from outcomes,
-            but statutory eligibility cannot be changed by learning agents.
-          </p>
-        </aside>
-      </div>
-    </Container>
-  );
-}
+ head:()=>({meta:[{title:"Case | DOMUREVA"},{name:"description",content:"Track a single property delivery case: journey progress, Reva's recommendation and governance notes."},{property:"og:title",content:"Case | DOMUREVA"},{property:"og:description",content:"Journey progress and next actions for one property case."}]}),component:CaseDetailPage});
+type CaseRow={id:string;status:string;created_at:string;properties:{postcode:string;address_line:string|null}|null};
+function resolveStage(status:string):CaseStage{return(CASE_STAGES as readonly string[]).includes(status)?status as CaseStage:"funding"}
+function CaseDetailPage(){const {caseId}=Route.useParams();const q=useQuery({queryKey:["cases",caseId],queryFn:async()=>{const {data,error}=await supabase.from("cases").select("id,status,created_at,properties(postcode,address_line)").eq("id",caseId).maybeSingle();if(error)throw error;return data as unknown as CaseRow|null}});if(q.isLoading)return <Container><Skeleton className="h-44 w-full rounded-[30px]"/></Container>;if(q.isError||!q.data)return <Container><div className="rounded-[30px] border border-border bg-card p-10 text-center shadow-card"><p className="font-display text-xl font-bold text-primary">Case not found</p><p className="mt-2 text-sm text-muted-foreground">It may have been removed, or you don't have access to it.</p><Button asChild className="mt-5 rounded-full"><Link to="/cases">Back to cases</Link></Button></div></Container>;
+ const record=q.data;const stage=resolveStage(record.status);const progress=progressFor(stage);const address=record.properties?.address_line??record.properties?.postcode??"Property case";
+ return <Container className="max-w-[1240px]">
+  <div className="overflow-hidden rounded-[30px] bg-navy p-7 text-navy-foreground shadow-lift md:p-9"><div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end"><div><p className="eyebrow text-leaf-soft">Case {record.id.slice(0,8).toUpperCase()}</p><h1 className="mt-3 max-w-3xl font-display text-3xl font-bold md:text-5xl">{address}</h1><p className="mt-3 text-sm text-navy-foreground/65">Opened {new Date(record.created_at).toLocaleDateString()} · current stage <span className="font-semibold capitalize text-leaf-soft">{stage}</span></p></div><Button asChild className="rounded-full bg-amber text-amber-foreground"><Link to="/copilot">Ask Reva <Sparkles className="ml-1 size-4"/></Link></Button></div><div className="mt-8 flex items-center justify-between"><span className="text-sm font-semibold">Journey progress</span><span className="font-display text-2xl font-bold text-leaf-soft">{progress}%</span></div><Progress value={progress} className="mt-3"/></div>
+  <div className="mt-6 overflow-x-auto pb-2"><div className="flex min-w-max gap-2">{CASE_STAGES.map((s,i)=><div key={s} className={`rounded-full border px-4 py-2 text-xs font-semibold capitalize ${s===stage?"border-transparent bg-primary text-primary-foreground":"border-border bg-card text-muted-foreground"}`}><span className="mr-2 opacity-60">0{i+1}</span>{s}</div>)}</div></div>
+  <div className="mt-8 grid gap-6 lg:grid-cols-[1.35fr_.65fr]">
+   <section className="rounded-[30px] border border-border bg-card p-7 shadow-card"><div className="flex items-center justify-between gap-4"><div><p className="eyebrow text-accent">Next best action</p><h2 className="mt-2 font-display text-2xl font-bold text-primary">Prepare the evidence-backed application.</h2></div><Sparkles className="size-6 text-accent"/></div><p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground">Funding routes are matched. Review the evidence pack, close the missing items and prepare the application before progressing into contractor quotations.</p><div className="mt-6 grid gap-3 sm:grid-cols-2"><Link to="/application-pack" className="group rounded-2xl border border-border bg-background p-5 transition-colors hover:bg-secondary"><FileCheck2 className="size-5 text-accent"/><p className="mt-4 font-display text-lg font-bold text-primary">Prepare application</p><p className="mt-1 text-sm text-muted-foreground">Bring eligibility, evidence, costs and audit manifest together.</p><span className="mt-4 inline-flex items-center text-sm font-semibold text-accent">Open pack <ArrowRight className="ml-1 size-4 transition-transform group-hover:translate-x-1"/></span></Link><Link to="/applications" className="group rounded-2xl border border-border bg-background p-5 transition-colors hover:bg-secondary"><ShieldCheck className="size-5 text-leaf"/><p className="mt-4 font-display text-lg font-bold text-primary">Review evidence</p><p className="mt-1 text-sm text-muted-foreground">See exactly what is verified, provided and still missing.</p><span className="mt-4 inline-flex items-center text-sm font-semibold text-accent">Review items <ArrowRight className="ml-1 size-4 transition-transform group-hover:translate-x-1"/></span></Link></div></section>
+   <aside className="space-y-4"><div className="rounded-[30px] bg-gradient-brand p-7 text-navy-foreground shadow-card"><ShieldCheck className="size-6"/><h2 className="mt-5 font-display text-xl font-bold">Governed by reviewed rules.</h2><p className="mt-3 text-sm leading-6 text-navy-foreground/72">AI can rank, explain and learn from outcomes. It cannot silently change statutory eligibility or manufacture a grant approval.</p></div><div className="rounded-3xl border border-border bg-card p-6 shadow-card"><p className="eyebrow text-accent">Case controls</p><div className="mt-4 grid gap-2"><Button asChild variant="outline" className="justify-between rounded-xl"><Link to="/projects">Projects <ArrowRight className="size-4"/></Link></Button><Button asChild variant="outline" className="justify-between rounded-xl"><Link to="/notifications">Notifications <ArrowRight className="size-4"/></Link></Button></div></div></aside>
+  </div>
+ </Container>}
