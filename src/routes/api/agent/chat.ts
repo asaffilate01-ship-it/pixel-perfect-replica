@@ -22,7 +22,7 @@ export const Route = createFileRoute("/api/agent/chat")({
           const body = schema.parse(await request.json());
 
           const instruction = systemInstruction({
-            caseId: body.caseId,
+            caseId: body.caseId ?? undefined,
             role: body.role || "owner",
             verifiedFacts: body.verifiedFacts || {},
             reviewedSchemeFacts: body.reviewedSchemeFacts || {},

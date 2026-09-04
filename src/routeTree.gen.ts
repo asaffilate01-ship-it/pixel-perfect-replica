@@ -24,6 +24,7 @@ import { Route as LegalCookiesRouteImport } from './routes/legal/cookies'
 import { Route as LegalPrivacyRouteImport } from './routes/legal/privacy'
 import { Route as AuthenticatedAdminIntegrationsRouteImport } from './routes/_authenticated/admin/integrations'
 import { Route as AuthenticatedAdminReleaseRouteImport } from './routes/_authenticated/admin/release'
+import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin/security'
 import { Route as AuthenticatedApplicationsIndexRouteImport } from './routes/_authenticated/applications/index'
 import { Route as AuthenticatedCasesIndexRouteImport } from './routes/_authenticated/cases/index'
 import { Route as AuthenticatedCasesCaseIdRouteImport } from './routes/_authenticated/cases/$caseId'
@@ -146,6 +147,12 @@ const AuthenticatedAdminReleaseRoute =
   AuthenticatedAdminReleaseRouteImport.update({
     id: '/admin/release',
     path: '/admin/release',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminSecurityRoute =
+  AuthenticatedAdminSecurityRouteImport.update({
+    id: '/admin/security',
+    path: '/admin/security',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedApplicationsIndexRoute =
@@ -403,6 +410,7 @@ export interface FileRoutesByFullPath {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/admin/integrations': typeof AuthenticatedAdminIntegrationsRoute
   '/admin/release': typeof AuthenticatedAdminReleaseRoute
+  '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
   '/funding/stack': typeof AuthenticatedFundingStackRoute
   '/properties/new': typeof AuthenticatedPropertiesNewRoute
@@ -463,6 +471,7 @@ export interface FileRoutesByTo {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/admin/integrations': typeof AuthenticatedAdminIntegrationsRoute
   '/admin/release': typeof AuthenticatedAdminReleaseRoute
+  '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
   '/funding/stack': typeof AuthenticatedFundingStackRoute
   '/properties/new': typeof AuthenticatedPropertiesNewRoute
@@ -525,6 +534,7 @@ export interface FileRoutesById {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/_authenticated/admin/integrations': typeof AuthenticatedAdminIntegrationsRoute
   '/_authenticated/admin/release': typeof AuthenticatedAdminReleaseRoute
+  '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
   '/_authenticated/funding/stack': typeof AuthenticatedFundingStackRoute
   '/_authenticated/properties/new': typeof AuthenticatedPropertiesNewRoute
@@ -587,6 +597,7 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/admin/integrations'
     | '/admin/release'
+    | '/admin/security'
     | '/cases/$caseId'
     | '/funding/stack'
     | '/properties/new'
@@ -647,6 +658,7 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/admin/integrations'
     | '/admin/release'
+    | '/admin/security'
     | '/cases/$caseId'
     | '/funding/stack'
     | '/properties/new'
@@ -708,6 +720,7 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/_authenticated/admin/integrations'
     | '/_authenticated/admin/release'
+    | '/_authenticated/admin/security'
     | '/_authenticated/cases/$caseId'
     | '/_authenticated/funding/stack'
     | '/_authenticated/properties/new'
@@ -906,6 +919,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/release'
       fullPath: '/admin/release'
       preLoaderRoute: typeof AuthenticatedAdminReleaseRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/security': {
+      id: '/_authenticated/admin/security'
+      path: '/admin/security'
+      fullPath: '/admin/security'
+      preLoaderRoute: typeof AuthenticatedAdminSecurityRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/applications/': {
@@ -1228,6 +1248,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedProjectsRoute: typeof AuthenticatedProjectsRoute
   AuthenticatedAdminIntegrationsRoute: typeof AuthenticatedAdminIntegrationsRoute
   AuthenticatedAdminReleaseRoute: typeof AuthenticatedAdminReleaseRoute
+  AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedCasesCaseIdRoute: typeof AuthenticatedCasesCaseIdRoute
   AuthenticatedFundingStackRoute: typeof AuthenticatedFundingStackRoute
   AuthenticatedPropertiesNewRoute: typeof AuthenticatedPropertiesNewRoute
@@ -1246,6 +1267,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedProjectsRoute: AuthenticatedProjectsRoute,
   AuthenticatedAdminIntegrationsRoute: AuthenticatedAdminIntegrationsRoute,
   AuthenticatedAdminReleaseRoute: AuthenticatedAdminReleaseRoute,
+  AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedCasesCaseIdRoute: AuthenticatedCasesCaseIdRoute,
   AuthenticatedFundingStackRoute: AuthenticatedFundingStackRoute,
   AuthenticatedPropertiesNewRoute: AuthenticatedPropertiesNewRoute,
