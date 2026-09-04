@@ -23,6 +23,7 @@ import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as LegalCookiesRouteImport } from './routes/legal/cookies'
 import { Route as LegalPrivacyRouteImport } from './routes/legal/privacy'
 import { Route as AuthenticatedAdminIntegrationsRouteImport } from './routes/_authenticated/admin/integrations'
+import { Route as AuthenticatedAdminReleaseRouteImport } from './routes/_authenticated/admin/release'
 import { Route as AuthenticatedApplicationsIndexRouteImport } from './routes/_authenticated/applications/index'
 import { Route as AuthenticatedCasesIndexRouteImport } from './routes/_authenticated/cases/index'
 import { Route as AuthenticatedCasesCaseIdRouteImport } from './routes/_authenticated/cases/$caseId'
@@ -30,6 +31,8 @@ import { Route as AuthenticatedFundingIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedFundingStackRouteImport } from './routes/_authenticated/funding/stack'
 import { Route as AuthenticatedPropertiesNewRouteImport } from './routes/_authenticated/properties/new'
 import { Route as AuthenticatedSettingsPrivacyRouteImport } from './routes/_authenticated/settings/privacy'
+import { Route as ApiAgentChatRouteImport } from './routes/api/agent/chat'
+import { Route as ApiAgentsLearnRouteImport } from './routes/api/agents/learn'
 import { Route as ApiApplicationPackIndexRouteImport } from './routes/api/application-pack/index'
 import { Route as ApiApplicationPackExportRouteImport } from './routes/api/application-pack/export'
 import { Route as ApiApplicationPackGenerateRouteImport } from './routes/api/application-pack/generate'
@@ -53,6 +56,7 @@ import { Route as ApiProviderOffersRespondRouteImport } from './routes/api/provi
 import { Route as ApiProviderRespondRouteImport } from './routes/api/provider/respond'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiQuotesSubmitRouteImport } from './routes/api/quotes/submit'
+import { Route as ApiReleaseAcceptanceRouteImport } from './routes/api/release/acceptance'
 import { Route as ApiReportsCouncilRouteImport } from './routes/api/reports/council'
 import { Route as ApiReviewRuleChangeRouteImport } from './routes/api/review/rule-change'
 import { Route as ApiWorkflowCompleteMilestoneRouteImport } from './routes/api/workflow/complete-milestone'
@@ -138,6 +142,12 @@ const AuthenticatedAdminIntegrationsRoute =
     path: '/admin/integrations',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminReleaseRoute =
+  AuthenticatedAdminReleaseRouteImport.update({
+    id: '/admin/release',
+    path: '/admin/release',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedApplicationsIndexRoute =
   AuthenticatedApplicationsIndexRouteImport.update({
     id: '/applications/',
@@ -179,6 +189,16 @@ const AuthenticatedSettingsPrivacyRoute =
     path: '/settings/privacy',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiAgentChatRoute = ApiAgentChatRouteImport.update({
+  id: '/api/agent/chat',
+  path: '/api/agent/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAgentsLearnRoute = ApiAgentsLearnRouteImport.update({
+  id: '/api/agents/learn',
+  path: '/api/agents/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiApplicationPackIndexRoute = ApiApplicationPackIndexRouteImport.update({
   id: '/api/application-pack/',
   path: '/api/application-pack/',
@@ -300,6 +320,11 @@ const ApiQuotesSubmitRoute = ApiQuotesSubmitRouteImport.update({
   path: '/api/quotes/submit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiReleaseAcceptanceRoute = ApiReleaseAcceptanceRouteImport.update({
+  id: '/api/release/acceptance',
+  path: '/api/release/acceptance',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiReportsCouncilRoute = ApiReportsCouncilRouteImport.update({
   id: '/api/reports/council',
   path: '/api/reports/council',
@@ -377,10 +402,13 @@ export interface FileRoutesByFullPath {
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/admin/integrations': typeof AuthenticatedAdminIntegrationsRoute
+  '/admin/release': typeof AuthenticatedAdminReleaseRoute
   '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
   '/funding/stack': typeof AuthenticatedFundingStackRoute
   '/properties/new': typeof AuthenticatedPropertiesNewRoute
   '/settings/privacy': typeof AuthenticatedSettingsPrivacyRoute
+  '/api/agent/chat': typeof ApiAgentChatRoute
+  '/api/agents/learn': typeof ApiAgentsLearnRoute
   '/api/application-pack/export': typeof ApiApplicationPackExportRoute
   '/api/application-pack/generate': typeof ApiApplicationPackGenerateRoute
   '/api/billing/entitlements': typeof ApiBillingEntitlementsRoute
@@ -402,6 +430,7 @@ export interface FileRoutesByFullPath {
   '/api/provider/respond': typeof ApiProviderRespondRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/quotes/submit': typeof ApiQuotesSubmitRoute
+  '/api/release/acceptance': typeof ApiReleaseAcceptanceRoute
   '/api/reports/council': typeof ApiReportsCouncilRoute
   '/api/review/rule-change': typeof ApiReviewRuleChangeRoute
   '/api/workflow/complete-milestone': typeof ApiWorkflowCompleteMilestoneRoute
@@ -433,10 +462,13 @@ export interface FileRoutesByTo {
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/admin/integrations': typeof AuthenticatedAdminIntegrationsRoute
+  '/admin/release': typeof AuthenticatedAdminReleaseRoute
   '/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
   '/funding/stack': typeof AuthenticatedFundingStackRoute
   '/properties/new': typeof AuthenticatedPropertiesNewRoute
   '/settings/privacy': typeof AuthenticatedSettingsPrivacyRoute
+  '/api/agent/chat': typeof ApiAgentChatRoute
+  '/api/agents/learn': typeof ApiAgentsLearnRoute
   '/api/application-pack/export': typeof ApiApplicationPackExportRoute
   '/api/application-pack/generate': typeof ApiApplicationPackGenerateRoute
   '/api/billing/entitlements': typeof ApiBillingEntitlementsRoute
@@ -458,6 +490,7 @@ export interface FileRoutesByTo {
   '/api/provider/respond': typeof ApiProviderRespondRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/quotes/submit': typeof ApiQuotesSubmitRoute
+  '/api/release/acceptance': typeof ApiReleaseAcceptanceRoute
   '/api/reports/council': typeof ApiReportsCouncilRoute
   '/api/review/rule-change': typeof ApiReviewRuleChangeRoute
   '/api/workflow/complete-milestone': typeof ApiWorkflowCompleteMilestoneRoute
@@ -491,10 +524,13 @@ export interface FileRoutesById {
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/_authenticated/admin/integrations': typeof AuthenticatedAdminIntegrationsRoute
+  '/_authenticated/admin/release': typeof AuthenticatedAdminReleaseRoute
   '/_authenticated/cases/$caseId': typeof AuthenticatedCasesCaseIdRoute
   '/_authenticated/funding/stack': typeof AuthenticatedFundingStackRoute
   '/_authenticated/properties/new': typeof AuthenticatedPropertiesNewRoute
   '/_authenticated/settings/privacy': typeof AuthenticatedSettingsPrivacyRoute
+  '/api/agent/chat': typeof ApiAgentChatRoute
+  '/api/agents/learn': typeof ApiAgentsLearnRoute
   '/api/application-pack/export': typeof ApiApplicationPackExportRoute
   '/api/application-pack/generate': typeof ApiApplicationPackGenerateRoute
   '/api/billing/entitlements': typeof ApiBillingEntitlementsRoute
@@ -516,6 +552,7 @@ export interface FileRoutesById {
   '/api/provider/respond': typeof ApiProviderRespondRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/quotes/submit': typeof ApiQuotesSubmitRoute
+  '/api/release/acceptance': typeof ApiReleaseAcceptanceRoute
   '/api/reports/council': typeof ApiReportsCouncilRoute
   '/api/review/rule-change': typeof ApiReviewRuleChangeRoute
   '/api/workflow/complete-milestone': typeof ApiWorkflowCompleteMilestoneRoute
@@ -549,10 +586,13 @@ export interface FileRouteTypes {
     | '/legal/cookies'
     | '/legal/privacy'
     | '/admin/integrations'
+    | '/admin/release'
     | '/cases/$caseId'
     | '/funding/stack'
     | '/properties/new'
     | '/settings/privacy'
+    | '/api/agent/chat'
+    | '/api/agents/learn'
     | '/api/application-pack/export'
     | '/api/application-pack/generate'
     | '/api/billing/entitlements'
@@ -574,6 +614,7 @@ export interface FileRouteTypes {
     | '/api/provider/respond'
     | '/api/public/health'
     | '/api/quotes/submit'
+    | '/api/release/acceptance'
     | '/api/reports/council'
     | '/api/review/rule-change'
     | '/api/workflow/complete-milestone'
@@ -605,10 +646,13 @@ export interface FileRouteTypes {
     | '/legal/cookies'
     | '/legal/privacy'
     | '/admin/integrations'
+    | '/admin/release'
     | '/cases/$caseId'
     | '/funding/stack'
     | '/properties/new'
     | '/settings/privacy'
+    | '/api/agent/chat'
+    | '/api/agents/learn'
     | '/api/application-pack/export'
     | '/api/application-pack/generate'
     | '/api/billing/entitlements'
@@ -630,6 +674,7 @@ export interface FileRouteTypes {
     | '/api/provider/respond'
     | '/api/public/health'
     | '/api/quotes/submit'
+    | '/api/release/acceptance'
     | '/api/reports/council'
     | '/api/review/rule-change'
     | '/api/workflow/complete-milestone'
@@ -662,10 +707,13 @@ export interface FileRouteTypes {
     | '/legal/cookies'
     | '/legal/privacy'
     | '/_authenticated/admin/integrations'
+    | '/_authenticated/admin/release'
     | '/_authenticated/cases/$caseId'
     | '/_authenticated/funding/stack'
     | '/_authenticated/properties/new'
     | '/_authenticated/settings/privacy'
+    | '/api/agent/chat'
+    | '/api/agents/learn'
     | '/api/application-pack/export'
     | '/api/application-pack/generate'
     | '/api/billing/entitlements'
@@ -687,6 +735,7 @@ export interface FileRouteTypes {
     | '/api/provider/respond'
     | '/api/public/health'
     | '/api/quotes/submit'
+    | '/api/release/acceptance'
     | '/api/reports/council'
     | '/api/review/rule-change'
     | '/api/workflow/complete-milestone'
@@ -713,6 +762,8 @@ export interface RootRouteChildren {
   AuthCallbackRoute: typeof AuthCallbackRoute
   LegalCookiesRoute: typeof LegalCookiesRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
+  ApiAgentChatRoute: typeof ApiAgentChatRoute
+  ApiAgentsLearnRoute: typeof ApiAgentsLearnRoute
   ApiApplicationPackExportRoute: typeof ApiApplicationPackExportRoute
   ApiApplicationPackGenerateRoute: typeof ApiApplicationPackGenerateRoute
   ApiBillingEntitlementsRoute: typeof ApiBillingEntitlementsRoute
@@ -734,6 +785,7 @@ export interface RootRouteChildren {
   ApiProviderRespondRoute: typeof ApiProviderRespondRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
   ApiQuotesSubmitRoute: typeof ApiQuotesSubmitRoute
+  ApiReleaseAcceptanceRoute: typeof ApiReleaseAcceptanceRoute
   ApiReportsCouncilRoute: typeof ApiReportsCouncilRoute
   ApiReviewRuleChangeRoute: typeof ApiReviewRuleChangeRoute
   ApiWorkflowCompleteMilestoneRoute: typeof ApiWorkflowCompleteMilestoneRoute
@@ -849,6 +901,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIntegrationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/release': {
+      id: '/_authenticated/admin/release'
+      path: '/admin/release'
+      fullPath: '/admin/release'
+      preLoaderRoute: typeof AuthenticatedAdminReleaseRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/applications/': {
       id: '/_authenticated/applications/'
       path: '/applications'
@@ -897,6 +956,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/settings/privacy'
       preLoaderRoute: typeof AuthenticatedSettingsPrivacyRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/agent/chat': {
+      id: '/api/agent/chat'
+      path: '/api/agent/chat'
+      fullPath: '/api/agent/chat'
+      preLoaderRoute: typeof ApiAgentChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/agents/learn': {
+      id: '/api/agents/learn'
+      path: '/api/agents/learn'
+      fullPath: '/api/agents/learn'
+      preLoaderRoute: typeof ApiAgentsLearnRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/application-pack/': {
       id: '/api/application-pack/'
@@ -1059,6 +1132,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiQuotesSubmitRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/release/acceptance': {
+      id: '/api/release/acceptance'
+      path: '/api/release/acceptance'
+      fullPath: '/api/release/acceptance'
+      preLoaderRoute: typeof ApiReleaseAcceptanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/reports/council': {
       id: '/api/reports/council'
       path: '/api/reports/council'
@@ -1147,6 +1227,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOpportunitiesRoute: typeof AuthenticatedOpportunitiesRoute
   AuthenticatedProjectsRoute: typeof AuthenticatedProjectsRoute
   AuthenticatedAdminIntegrationsRoute: typeof AuthenticatedAdminIntegrationsRoute
+  AuthenticatedAdminReleaseRoute: typeof AuthenticatedAdminReleaseRoute
   AuthenticatedCasesCaseIdRoute: typeof AuthenticatedCasesCaseIdRoute
   AuthenticatedFundingStackRoute: typeof AuthenticatedFundingStackRoute
   AuthenticatedPropertiesNewRoute: typeof AuthenticatedPropertiesNewRoute
@@ -1164,6 +1245,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOpportunitiesRoute: AuthenticatedOpportunitiesRoute,
   AuthenticatedProjectsRoute: AuthenticatedProjectsRoute,
   AuthenticatedAdminIntegrationsRoute: AuthenticatedAdminIntegrationsRoute,
+  AuthenticatedAdminReleaseRoute: AuthenticatedAdminReleaseRoute,
   AuthenticatedCasesCaseIdRoute: AuthenticatedCasesCaseIdRoute,
   AuthenticatedFundingStackRoute: AuthenticatedFundingStackRoute,
   AuthenticatedPropertiesNewRoute: AuthenticatedPropertiesNewRoute,
@@ -1184,6 +1266,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthCallbackRoute: AuthCallbackRoute,
   LegalCookiesRoute: LegalCookiesRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
+  ApiAgentChatRoute: ApiAgentChatRoute,
+  ApiAgentsLearnRoute: ApiAgentsLearnRoute,
   ApiApplicationPackExportRoute: ApiApplicationPackExportRoute,
   ApiApplicationPackGenerateRoute: ApiApplicationPackGenerateRoute,
   ApiBillingEntitlementsRoute: ApiBillingEntitlementsRoute,
@@ -1205,6 +1289,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiProviderRespondRoute: ApiProviderRespondRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
   ApiQuotesSubmitRoute: ApiQuotesSubmitRoute,
+  ApiReleaseAcceptanceRoute: ApiReleaseAcceptanceRoute,
   ApiReportsCouncilRoute: ApiReportsCouncilRoute,
   ApiReviewRuleChangeRoute: ApiReviewRuleChangeRoute,
   ApiWorkflowCompleteMilestoneRoute: ApiWorkflowCompleteMilestoneRoute,

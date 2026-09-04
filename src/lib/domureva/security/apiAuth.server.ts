@@ -47,3 +47,5 @@ export function errorResponse(e: unknown, fallbackStatus = 400): Response {
   const message = e instanceof Error ? e.message : "Invalid request";
   return Response.json({ error: message }, { status: fallbackStatus });
 }
+
+export const requireApiUser = requireUser;
