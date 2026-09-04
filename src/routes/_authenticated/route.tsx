@@ -1,5 +1,5 @@
-import { Outlet, createFileRoute, useNavigate, useRouterState } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { Outlet, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { useAuth } from "@/hooks/useAuth";
@@ -11,13 +11,14 @@ export const Route = createFileRoute("/_authenticated")({
 function AuthenticatedLayout() {
   const { session, loading } = useAuth();
   const navigate = useNavigate();
-  const pathname = useRouterState({ select: (s) => s.location.href });
+  const redirected = useRef(false);
 
   useEffect(() => {
-    if (!loading && !session) {
-      navigate({ to: "/login", search: { next: pathname }, replace: true });
-    }
-  }, [loading, session, navigate, pathname]);
+    if (loading || session || redirected.current) return;
+    redirected.current = true;
+    const next = `${window.location.pathname}${window.location.search}`;
+    navigate({ to: "/login", search: { next }, replace: true });
+  }, [loading, session, navigate]);
 
   if (loading || !session) {
     return (
