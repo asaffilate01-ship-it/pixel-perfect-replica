@@ -1,97 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CheckCircle2, Clock, RefreshCcw } from "lucide-react";
+import { BadgeCheck, CheckCircle2, Clock, Gauge, MapPin, RefreshCcw, ShieldCheck } from "lucide-react";
 
-import { Container, PageHeader } from "@/components/layout/PageShell";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Container } from "@/components/layout/PageShell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 
-const checks: Array<[string, string]> = [
-  ["Craftvaro identity", "Verified"],
-  ["Public liability", "Verified"],
-  ["Coverage", "LU · AL · HP"],
-  ["Gas Safe", "If applicable"],
-  ["NICEIC", "If applicable"],
-  ["Retrofit accreditation", "Pending"],
-];
-
-export const Route = createFileRoute("/_authenticated/contractors/profile")({
-  head: () => ({
-    meta: [
-      { title: "Contractor qualification profile | DOMUREVA" },
-      {
-        name: "description",
-        content: "Craftvaro-verified delivery eligibility and Reva Match scoring signals.",
-      },
-      { property: "og:title", content: "Contractor qualification profile | DOMUREVA" },
-      {
-        property: "og:description",
-        content: "Track delivery eligibility checks and your current Reva Match delivery score.",
-      },
-    ],
-  }),
-  component: ContractorProfilePage,
-});
-
-function ContractorProfilePage() {
-  return (
-    <Container>
-      <PageHeader
-        eyebrow="Craftvaro verified delivery"
-        title="Contractor qualification profile"
-      />
-
-      <div className="mt-8 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>Delivery eligibility</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="divide-y divide-border">
-              {checks.map(([label, value]) => (
-                <div key={label} className="flex items-center justify-between py-3 text-sm">
-                  <span className="font-medium text-foreground">{label}</span>
-                  <Badge
-                    variant={value === "Pending" ? "outline" : "secondary"}
-                    className={
-                      value === "Pending"
-                        ? "border-warning/40 text-warning"
-                        : "border-transparent bg-leaf/15 text-leaf-soft"
-                    }
-                  >
-                    {value === "Pending" ? (
-                      <Clock className="mr-1 size-3" />
-                    ) : (
-                      <CheckCircle2 className="mr-1 size-3" />
-                    )}
-                    {value}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-            <Separator className="my-6" />
-            <Button className="gap-2">
-              <RefreshCcw className="size-4" />
-              Sync Craftvaro profile
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>Matching signals</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <p className="text-sm text-muted-foreground">
-              Reva Match scores by verified trade, location, capacity, accreditation, evidence
-              quality, project outcomes and owner/provider requirements.
-            </p>
-            <p className="font-display text-5xl font-bold text-primary">86</p>
-            <p className="text-sm text-muted-foreground">Current delivery score / 100</p>
-          </CardContent>
-        </Card>
-      </div>
-    </Container>
-  );
-}
+const checks:Array<[string,string]>=[["Craftvaro identity","Verified"],["Public liability","Verified"],["Coverage","LU · AL · HP"],["Gas Safe","If applicable"],["NICEIC","If applicable"],["Retrofit accreditation","Pending"]];
+export const Route=createFileRoute("/_authenticated/contractors/profile")({head:()=>({meta:[{title:"Contractor qualification profile | DOMUREVA"},{name:"description",content:"Craftvaro-verified delivery eligibility and Reva Match scoring signals."},{property:"og:title",content:"Contractor qualification profile | DOMUREVA"},{property:"og:description",content:"Track delivery eligibility checks and your current Reva Match delivery score."}]}),component:ContractorProfilePage});
+function ContractorProfilePage(){return <Container className="max-w-[1180px]">
+ <div className="overflow-hidden rounded-[30px] bg-gradient-brand p-7 text-navy-foreground shadow-lift md:p-9"><div className="flex flex-wrap items-end justify-between gap-6"><div><p className="eyebrow text-navy-foreground/60">Craftvaro verified delivery</p><h1 className="mt-3 font-display text-3xl font-bold md:text-5xl">Contractor qualification profile</h1><p className="mt-4 max-w-2xl text-sm leading-6 text-navy-foreground/72">Keep verification, coverage, accreditation and delivery signals current so Reva Match can rank the right work for your organisation.</p></div><BadgeCheck className="size-9"/></div></div>
+ <div className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_.8fr]">
+  <section className="rounded-[30px] border border-border bg-card p-7 shadow-card"><div className="flex items-center justify-between gap-4"><div><p className="eyebrow text-accent">Eligibility</p><h2 className="mt-2 font-display text-2xl font-bold text-primary">Delivery checks</h2></div><Button className="gap-2 rounded-full"><RefreshCcw className="size-4"/>Sync profile</Button></div><div className="mt-6 divide-y divide-border">{checks.map(([label,value])=><div key={label} className="flex items-center justify-between gap-4 py-4"><div><p className="text-sm font-semibold text-primary">{label}</p>{label==="Coverage"?<p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground"><MapPin className="size-3"/>Current service areas</p>:null}</div><Badge variant={value==="Pending"?"outline":"secondary"} className={value==="Pending"?"border-warning/40 text-warning":"border-transparent bg-leaf/15 text-leaf"}>{value==="Pending"?<Clock className="mr-1 size-3"/>:<CheckCircle2 className="mr-1 size-3"/>}{value}</Badge></div>)}</div></section>
+  <aside className="space-y-4"><div className="rounded-[30px] bg-navy p-7 text-navy-foreground shadow-card"><Gauge className="size-6 text-leaf-soft"/><p className="mt-5 eyebrow text-leaf-soft">Reva Match score</p><div className="mt-2 flex items-end gap-2"><span className="font-display text-6xl font-bold">86</span><span className="pb-2 text-sm text-navy-foreground/55">/100</span></div><p className="mt-4 text-sm leading-6 text-navy-foreground/68">Based on verified trade, location, capacity, accreditation, evidence quality, outcomes and project requirements.</p></div><div className="rounded-3xl border border-border bg-card p-6 shadow-card"><ShieldCheck className="size-5 text-accent"/><h2 className="mt-4 font-display text-lg font-bold text-primary">Verification matters</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">A high score does not override project-specific requirements or verification gates.</p></div></aside>
+ </div>
+ </Container>}
