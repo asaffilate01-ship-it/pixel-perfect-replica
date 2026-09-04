@@ -2,7 +2,7 @@ export const CASE_STAGES = ['intake','assessment','funding','application','quote
 export type CaseStage = typeof CASE_STAGES[number];
 export function nextStage(stage: CaseStage): CaseStage {
   const i = CASE_STAGES.indexOf(stage);
-  return CASE_STAGES[Math.min(i + 1, CASE_STAGES.length - 1)];
+  return CASE_STAGES[Math.min(i + 1, CASE_STAGES.length - 1)]!;
 }
 export function progressFor(stage: CaseStage) {
   const i = CASE_STAGES.indexOf(stage);

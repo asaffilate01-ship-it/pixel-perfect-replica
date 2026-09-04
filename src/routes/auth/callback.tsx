@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
 
-type CallbackSearch = { next?: string };
+type CallbackSearch = { next?: string | undefined };
 
 export const Route = createFileRoute("/auth/callback")({
   validateSearch: (search: Record<string, unknown>): CallbackSearch => ({
