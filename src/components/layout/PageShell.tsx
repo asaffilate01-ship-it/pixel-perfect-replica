@@ -52,14 +52,19 @@ export function StatCard({
   label,
   value,
   hint,
+  icon: Icon,
 }: {
   label: string;
   value: ReactNode;
   hint?: string;
+  icon?: LucideIcon;
 }) {
   return (
     <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
-      <p className="text-sm text-muted-foreground">{label}</p>
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">{label}</p>
+        {Icon ? <Icon className="size-4 text-accent" /> : null}
+      </div>
       <p className="mt-1 font-display text-3xl font-bold text-primary">{value}</p>
       {hint ? <p className="mt-1 text-xs text-muted-foreground">{hint}</p> : null}
     </div>
