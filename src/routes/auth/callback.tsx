@@ -7,7 +7,7 @@ type CallbackSearch = { next?: string };
 
 export const Route = createFileRoute("/auth/callback")({
   validateSearch: (search: Record<string, unknown>): CallbackSearch => ({
-    next: typeof search.next === "string" ? search.next : undefined,
+    next: typeof search["next"] === "string" ? search["next"] : undefined,
   }),
   head: () => ({
     meta: [

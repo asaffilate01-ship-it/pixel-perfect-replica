@@ -41,9 +41,9 @@ export async function notifyUser(
     let error: string | null = null;
 
     try {
-      if (channel === "email" && data.email) {
-        const sent = await sendEmail(data.email, title, `<p>${body}</p>`);
-        status = "skipped" in sent && sent.skipped ? "skipped" : "sent";
+      if (channel === "email" && data["email"]) {
+        const sent = await sendEmail(data["email"], title, `<p>${body}</p>`);
+        status = "skipped" in sent && sent["skipped"] ? "skipped" : "sent";
       } else if (channel === "in_app") {
         status = "sent";
       } else {
