@@ -23,7 +23,7 @@ export const Route = createFileRoute("/api/payments/checkout")({
           if (!priceId) throw new Error("Price not configured");
           const origin = new URL(request.url).origin;
           const session = await createCheckout({
-            customerEmail: user.email,
+            ...(user.email ? { customerEmail: user.email } : {}),
             priceId,
             successUrl: `${origin}/dashboard?payment=success`,
             cancelUrl: `${origin}/dashboard?payment=cancelled`,
