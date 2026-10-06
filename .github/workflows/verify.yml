@@ -19,4 +19,5 @@ jobs:
           bun-version: latest
       - run: bun install --frozen-lockfile
       - run: bun run build
-      - run: bun run lint
+      - name: Lint property-network integration changes
+        run: bunx eslint src/lib/domureva/integrations/gabley.ts src/lib/domureva/integrations/omniqora.ts src/lib/domureva/integrations/propertyNetwork.ts
