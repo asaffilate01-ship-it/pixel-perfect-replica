@@ -1,24 +1,28 @@
-# Pixel Perfect Replica
+# DOMUREVA
 
-Implement exactly the screenshot and nothing else
+DOMUREVA is the empty-home, regeneration and funding workspace in the iTechLounge property ecosystem.
 
-This project was built with [Lovable](https://lovable.dev).
+It keeps its own property/regeneration case data and can operate standalone. The application already includes funding, council, opportunities, applications, contractors, Copilot and evidence workflows.
 
-## Build with Lovable
+## Property network
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/a3f8b97c-4b2c-4d62-9456-e63662533f57).
+DOMUREVA now connects to:
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+- **Omniqora** for tenant-scoped property intelligence, vacancy analysis and governed AI runs.
+- **Gabley** for deal/opportunity workflows. Only human-approved DOMUREVA funding assessments are pushed back to a Gabley opportunity.
+- **Gabley Retrofit / Craftvaro** through their existing optional adapters.
+
+The databases remain separate. DOMUREVA does not become the Gabley transaction database, and Gabley does not become the authority for funding eligibility.
+
+### Server configuration
+
+Copy the placeholders from `.env.example` into the deployment secret store. Do not put integration secrets in browser/VITE variables.
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+npm ci
 npm run dev
 ```
+
+This project was built with Lovable. Current source is authoritative; deployment and external credentials must be validated separately before a connection is described as live.
