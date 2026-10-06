@@ -1,0 +1,23 @@
+name: Verify DOMUREVA
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - name: Lint property-network integration changes
+        run: bunx eslint src/lib/domureva/integrations/gabley.ts src/lib/domureva/integrations/omniqora.ts src/lib/domureva/integrations/propertyNetwork.ts
