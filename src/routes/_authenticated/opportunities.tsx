@@ -167,8 +167,8 @@ function OpportunitiesPage() {
                     </div>
                     <div className="flex items-center gap-5">
                       <div className="text-right">
-                        <p className="font-display text-xl font-semibold text-primary">{item.score == null ? "—" : Math.round(item.score)}</p>
-                        <p className="text-xs text-muted-foreground">Priority score</p>
+                        <p className="font-display text-xl font-semibold text-primary">{item.score == null ? "—" : Math.round(item.score * 100)}</p>
+                        <p className="text-xs text-muted-foreground">Priority score / 100</p>
                       </div>
                       <ArrowRight className="size-5 text-accent transition-transform group-hover:translate-x-1" aria-hidden="true" />
                     </div>
