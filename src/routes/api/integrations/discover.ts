@@ -14,8 +14,9 @@ export const Route = createFileRoute("/api/integrations/discover")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          const { supabaseAdmin, property } = await requireCaseAccess(request, body.caseId);
           const body = schema.parse(await request.json());
+
+          const { supabaseAdmin, property } = await requireCaseAccess(request, body.caseId);
           const job = await leadLensLive.discover({
             case_id: body.caseId,
             postcode: property.postcode,
