@@ -63,8 +63,8 @@ export const Route = createFileRoute("/api/workflow/match-funding")({
                 case_id: caseId,
                 scheme_id: m.schemeId,
                 eligible: m.eligible,
-                confidence: m.eligible ? 0.95 : 0.9,
-                explanation: { agent: decision.agent, reasons: decision.reasons, modelVersion: decision.modelVersion },
+                confidence: m.eligible ? 0.65 : 0.75,
+                explanation: { agent: decision.agent, reasons: decision.reasons, modelVersion: decision.modelVersion, requiresHumanReview: true, assessmentType: "preliminary" },
               },
               { onConflict: "case_id,scheme_id" },
             );
@@ -81,7 +81,10 @@ export const Route = createFileRoute("/api/workflow/match-funding")({
             sources: decision.sourceIds,
           });
 
-          await supabaseAdmin.from("cases").update({ status: "funding" }).eq("id", caseId);
+          if (decision.output.some((match) => match.eligible)) {
+            const { error: stageError } = await supabaseAdmin.from("cases").update({ status: "funding" }).eq("id", caseId);
+            if (stageError) throw stageError;
+          }
 
           return Response.json(decision);
         } catch (e) {
