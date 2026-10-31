@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { requireApiUser } from "@/lib/domureva/security/apiAuth.server";
+import { errorResponse } from "@/lib/domureva/security/apiAuth.server";
+import { requireCaseAccess } from "@/lib/domureva/security/caseAccess.server";
 import { dokuveraLive } from "@/lib/domureva/integrations/dokuveraLive";
 
 const schema = z.object({
@@ -13,29 +14,8 @@ export const Route = createFileRoute("/api/integrations/evidence")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          const { user, supabaseAdmin } = await requireApiUser(request);
+          const { user, supabaseAdmin } = await requireCaseAccess(request, body.caseId);
           const body = schema.parse(await request.json());
-
-          const { data: caseRow } = await supabaseAdmin
-            .from("cases")
-            .select("id, properties!inner(created_by)")
-            .eq("id", body.caseId)
-            .maybeSingle();
-
-          const property = caseRow
-            ? (caseRow as unknown as { properties?: { created_by?: string | null } | null }).properties
-            : null;
-          const ownsProperty = property?.created_by === user.id;
-
-          const { data: roleRows } = await supabaseAdmin
-            .from("user_roles")
-            .select("role")
-            .eq("user_id", user.id);
-          const elevated = (roleRows ?? []).some((r) => ["admin", "council"].includes(r.role));
-
-          if (!caseRow || (!ownsProperty && !elevated)) {
-            return Response.json({ error: "FORBIDDEN" }, { status: 403 });
-          }
 
           const callbackUrl = `${new URL(request.url).origin}/api/public/integrations/dokuvera-webhook`;
           const requestId = crypto.randomUUID();
@@ -64,7 +44,7 @@ export const Route = createFileRoute("/api/integrations/evidence")({
           return Response.json({ requestId, result });
         } catch (e) {
           if (e instanceof Response) return e;
-          return Response.json({ error: e instanceof Error ? e.message : "bad request" }, { status: 400 });
+          return errorResponse(e, 400);
         }
       },
     },
