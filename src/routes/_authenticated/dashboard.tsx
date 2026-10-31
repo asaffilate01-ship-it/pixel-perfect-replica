@@ -13,12 +13,12 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   component: DashboardPage,
 });
 
-type CaseRow = { id:string; stage:string|null; status:string|null; created_at:string; properties:{ address_line1:string|null; postcode:string|null }|null };
+type CaseRow = { id: string; status: string | null; created_at: string; properties: { address_line: string | null; postcode: string | null } | null };
 
 function DashboardPage() {
   const cases = useQuery({
     queryKey:["dashboard","cases"],
-    queryFn: async()=>{ const {data,error}=await supabase.from("cases").select("id, stage, status, created_at, properties(address_line1, postcode)").order("created_at",{ascending:false}).limit(6); if(error) throw error; return (data??[]) as unknown as CaseRow[]; },
+    queryFn: async()=>{ const {data,error}=await supabase.from("cases").select("id, status, created_at, properties(address_line, postcode)").order("created_at",{ascending:false}).limit(6); if(error) throw error; return (data??[]) as unknown as CaseRow[]; },
   });
   const counts = useQuery({
     queryKey:["dashboard","counts"],
@@ -27,7 +27,7 @@ function DashboardPage() {
       supabase.from("funding_matches").select("id",{count:"exact",head:true}),
       supabase.from("projects").select("id",{count:"exact",head:true}),
       supabase.from("evidence_items").select("id",{count:"exact",head:true}),
-    ]); return {properties:properties.count??0,matches:matches.count??0,projects:projects.count??0,evidence:evidence.count??0}; },
+    ]); for (const result of [properties, matches, projects, evidence]) { if (result.error) throw result.error; } return {properties:properties.count??0,matches:matches.count??0,projects:projects.count??0,evidence:evidence.count??0}; },
   });
 
   return <Container className="pt-7">
@@ -46,6 +46,7 @@ function DashboardPage() {
       </div>
     </div>
 
+    {counts.isError ? <div className="mt-6 rounded-xl border border-destructive/30 p-4 text-sm text-destructive" role="alert">Dashboard totals could not be loaded. <Button type="button" variant="outline" size="sm" onClick={() => void counts.refetch()}>Retry</Button></div> : null}
     <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <StatCard icon={Building2} label="Properties" value={counts.data?.properties??"—"} hint="Registered properties" />
       <StatCard icon={Coins} label="Funding matches" value={counts.data?.matches??"—"} hint="Against reviewed schemes" />
@@ -57,7 +58,7 @@ function DashboardPage() {
       <section>
         <div className="flex items-center justify-between"><h2 className="font-display text-2xl font-bold text-primary">Recent cases</h2><Link to="/cases" className="inline-flex items-center gap-1 text-sm font-bold text-accent">All cases <ArrowRight className="size-4"/></Link></div>
         <div className="mt-4 overflow-hidden rounded-3xl border border-border bg-card shadow-card">
-          {cases.isLoading ? <div className="grid gap-3 p-6"><Skeleton className="h-16 w-full"/><Skeleton className="h-16 w-full"/><Skeleton className="h-16 w-4/5"/></div> : (cases.data?.length??0)===0 ? <div className="p-10 text-center"><p className="font-display text-xl font-bold text-primary">No cases yet</p><p className="mt-2 text-sm text-muted-foreground">Start with a property and DOMUREVA will create the case journey around it.</p><Button asChild className="mt-5"><Link to="/properties/new">Check a property</Link></Button></div> : <div className="divide-y divide-border">{cases.data?.map(c=><Link key={c.id} to="/cases/$caseId" params={{caseId:c.id}} className="group grid gap-2 px-5 py-5 transition-colors hover:bg-secondary/50 sm:grid-cols-[1fr_auto] sm:items-center"><div><p className="font-semibold text-primary">{c.properties?.address_line1??"Unnamed property"}</p><p className="mt-1 text-xs text-muted-foreground">{c.properties?.postcode??"No postcode"} · {c.stage??"assessment"} · {c.status??"open"}</p></div><ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-1"/></Link>)}</div>}
+          {cases.isLoading ? <div className="grid gap-3 p-6"><Skeleton className="h-16 w-full"/><Skeleton className="h-16 w-full"/><Skeleton className="h-16 w-4/5"/></div> : cases.isError ? <div className="p-8 text-center" role="alert"><p className="font-semibold text-primary">Could not load recent cases.</p><Button variant="outline" className="mt-4 rounded-full" onClick={() => void cases.refetch()}>Try again</Button></div> : (cases.data?.length??0)===0 ? <div className="p-10 text-center"><p className="font-display text-xl font-bold text-primary">No cases yet</p><p className="mt-2 text-sm text-muted-foreground">Start with a property and DOMUREVA will create the case journey around it.</p><Button asChild className="mt-5"><Link to="/properties/new">Check a property</Link></Button></div> : <div className="divide-y divide-border">{cases.data?.map(c=><Link key={c.id} to="/cases/$caseId" params={{caseId:c.id}} className="group grid gap-2 px-5 py-5 transition-colors hover:bg-secondary/50 sm:grid-cols-[1fr_auto] sm:items-center"><div><p className="font-semibold text-primary">{c.properties?.address_line??"Unnamed property"}</p><p className="mt-1 text-xs text-muted-foreground">{c.properties?.postcode??"No postcode"} · {c.status??"assessment"}</p></div><ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-1"/></Link>)}</div>}
         </div>
       </section>
       <aside className="rounded-3xl border border-border bg-card p-6 shadow-card">
