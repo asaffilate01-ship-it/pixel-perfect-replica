@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { requireRole, errorResponse } from "@/lib/domureva/security/apiAuth.server";
-import { requireCaseAccess } from "@/lib/domureva/security/caseAccess.server";
+import { errorResponse } from "@/lib/domureva/security/apiAuth.server";
+import { requireCaseAction } from "@/lib/domureva/security/caseAction.server";
 
 const S = z.object({
   caseId: z.string().uuid(),
@@ -17,14 +17,13 @@ export const Route = createFileRoute("/api/cases/outcome")({
       POST: async ({ request }) => {
         const b = S.safeParse(await request.json());
         if (!b.success) return Response.json({ error: b.error.flatten() }, { status: 400 });
-        let user;
+        let access;
         try {
-          ({ user } = await requireRole(request, ["council_officer", "housing_provider", "admin"]));
-          await requireCaseAccess(request, b.data.caseId);
+          access = await requireCaseAction(request, b.data.caseId, "record_outcome");
         } catch (e) {
-          return errorResponse(e, 401);
+          return errorResponse(e, 400);
         }
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const { user, supabaseAdmin } = access;
         const { data, error } = await supabaseAdmin
           .from("occupancy_outcomes")
           .upsert(
