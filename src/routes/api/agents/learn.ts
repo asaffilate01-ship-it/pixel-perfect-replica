@@ -7,7 +7,7 @@ export const Route = createFileRoute("/api/agents/learn")({
     handlers: {
       POST: async ({ request }) => {
         const cronSecret = process.env["CRON_SECRET"];
-        const presented = /^Bearer ([^\\s,]+)$/.exec(request.headers.get("authorization") ?? "")?.[1];
+        const presented = /^Bearer ([^\s,]+)$/.exec(request.headers.get("authorization") ?? "")?.[1];
         if (!cronSecret || !presented || !safeEqual(cronSecret, presented)) {
           return Response.json({ error: "unauthorised" }, { status: 401 });
         }
