@@ -6,6 +6,7 @@ describe("Case action permissions", () => {
     expect(canPerformCaseAction("contractor", "propose_award")).toBe(false);
     expect(canPerformCaseAction("contractor", "set_approved_funding")).toBe(false);
     expect(canPerformCaseAction("contractor", "complete_milestone")).toBe(true);
+    expect(canPerformCaseAction("contractor", "submit_quote")).toBe(true);
   });
 
   test("a property owner can request quotes but cannot certify grant funding", () => {
@@ -20,7 +21,7 @@ describe("Case action permissions", () => {
 
   test("unknown roles are always denied", () => {
     const actions: CaseAction[] = [
-      "match_funding", "request_quotes", "complete_milestone", "edit_financials",
+      "match_funding", "request_quotes", "submit_quote", "complete_milestone", "edit_financials",
       "set_approved_funding", "record_outcome", "propose_award", "upload_document",
       "read_documents", "preview_pack", "export_pack", "send_message",
     ];
