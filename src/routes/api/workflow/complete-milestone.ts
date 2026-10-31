@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { errorResponse, requireUser } from "@/lib/domureva/security/apiAuth.server";
-import { requireCaseAccess } from "@/lib/domureva/security/caseAccess.server";
+import { requireCaseAction } from "@/lib/domureva/security/caseAction.server";
 
 const schema = z.object({
   milestoneId: z.string().uuid(),
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/api/workflow/complete-milestone")({
             .eq("id", m.project_id)
             .maybeSingle();
           if (projectError || !project) throw new Error("Project not found");
-          await requireCaseAccess(request, project.case_id);
+          await requireCaseAction(request, project.case_id, "complete_milestone");
 
           if (b.evidenceIds.length) {
             const { data: evidence, error: evidenceError } = await supabaseAdmin
