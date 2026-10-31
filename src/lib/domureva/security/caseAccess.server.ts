@@ -9,7 +9,7 @@ export async function requireCaseAccess(request: Request, caseId: string) {
   const { user, supabaseAdmin } = await requireUser(request);
   const { data: record, error } = await supabaseAdmin
     .from("cases")
-    .select("id, property_id, properties!inner(created_by, postcode, empty_since, owner_type, intended_use)")
+    .select("id, property_id, properties!inner(created_by, address_line, postcode, empty_since, owner_type, intended_use)")
     .eq("id", caseId)
     .maybeSingle();
 
