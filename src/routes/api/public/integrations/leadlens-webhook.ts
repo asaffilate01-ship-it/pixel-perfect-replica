@@ -103,7 +103,7 @@ export const Route = createFileRoute("/api/public/integrations/leadlens-webhook"
               .select("id").single();
             if (draftError) throw draftError;
             schemeId = draft.id;
-          } else if (original.status === "reviewed") {
+          } else if (original.status === "reviewed" || original.status === "retired") {
             if (changed(original as Record<string, unknown>, proposal)) {
               const { data: previous, error: queueCheckError } = await db.from("rule_change_queue")
                 .select("id").eq("source_id", source.id).eq("scheme_id", original.id)
