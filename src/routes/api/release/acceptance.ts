@@ -27,6 +27,7 @@ export const Route = createFileRoute("/api/release/acceptance")({
             ready: false,
             status: "verification_required",
             required,
+            missing: required,
             reportedChecks,
             verifiedChecks: [],
             note: "The deployment gate needs independent server-side evidence and authorised sign-off.",
