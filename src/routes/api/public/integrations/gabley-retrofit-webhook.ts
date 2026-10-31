@@ -58,7 +58,11 @@ export const Route = createFileRoute("/api/public/integrations/gabley-retrofit-w
               .eq("status", "processed").limit(1).maybeSingle();
             if (logCheckError) throw logCheckError;
 
-            if (!logged) {
+            const { data: existingAssessment, error: assessmentLookupError } = await db.from("assessments")
+              .select("id").eq("case_id", p.case_id).eq("type", "retrofit")
+              .contains("result", { sourceEventId: eventId }).limit(1).maybeSingle();
+            if (assessmentLookupError) throw assessmentLookupError;
+            if (!logged && !existingAssessment) {
               const { error: insertError } = await db.from("assessments").insert({
                 case_id: p.case_id,
                 type: "retrofit",
