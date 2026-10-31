@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { requireRole, errorResponse } from "@/lib/domureva/security/apiAuth.server";
+import { requireCaseAccess } from "@/lib/domureva/security/caseAccess.server";
 
 const S = z.object({
   caseId: z.string().uuid(),
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/api/cases/outcome")({
         let user;
         try {
           ({ user } = await requireRole(request, ["council_officer", "housing_provider", "admin"]));
+          await requireCaseAccess(request, b.data.caseId);
         } catch (e) {
           return errorResponse(e, 401);
         }
