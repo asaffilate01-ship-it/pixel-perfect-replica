@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
+import type { Json } from "@/integrations/supabase/types";
 
 import { ApiAuthError, errorResponse, requireUser } from "@/lib/domureva/security/apiAuth.server";
 import { requireCaseAction } from "@/lib/domureva/security/caseAction.server";
@@ -91,7 +92,7 @@ export const Route = createFileRoute("/api/provider-offers/respond")({
               offer_id: offer.id,
               event_type: input.action,
               actor_id: user.id,
-              payload: { previousStatus: offer.status, currentStatus: changed.status, counterTerms: input.counterTerms ?? null },
+              payload: { previousStatus: offer.status, currentStatus: changed.status, counterTerms: JSON.parse(JSON.stringify(input.counterTerms ?? null)) as Json },
             });
           if (eventError) {
             // Status may already have changed. Do not claim a complete audited transition.
