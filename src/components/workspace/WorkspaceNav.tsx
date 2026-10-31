@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Bot, BriefcaseBusiness, Coins, FileText, FolderKanban, LayoutDashboard } from "lucide-react";
+import { Bot, BriefcaseBusiness, Coins, FileText, FolderKanban, LayoutDashboard, Sparkles } from "lucide-react";
 
 const ITEMS = [
   { to: "/dashboard", label: "Overview", icon: LayoutDashboard },
   { to: "/cases", label: "Cases", icon: FolderKanban },
+  { to: "/opportunities", label: "Opportunities", icon: Sparkles },
   { to: "/funding", label: "Funding", icon: Coins },
   { to: "/applications", label: "Applications", icon: FileText },
   { to: "/projects", label: "Projects", icon: BriefcaseBusiness },
