@@ -1,4 +1,5 @@
 import type { User } from "@supabase/supabase-js";
+import { ZodError } from "zod";
 
 export class ApiAuthError extends Error {
   status: number;
@@ -38,7 +39,7 @@ export async function requireRole(
     .from("user_roles")
     .select("role")
     .eq("user_id", user.id);
-  if (error) throw new ApiAuthError(error.message, 400);
+  if (error) throw new ApiAuthError("ROLE_LOOKUP_FAILED", 500);
   const hasRole = (rows ?? []).some((r) => wanted.includes(r.role));
   if (!hasRole) throw new ApiAuthError("FORBIDDEN", 403);
   return { user, supabaseAdmin };
@@ -48,8 +49,18 @@ export function errorResponse(e: unknown, fallbackStatus = 400): Response {
   if (e instanceof ApiAuthError) {
     return Response.json({ error: e.message }, { status: e.status });
   }
-  const message = e instanceof Error ? e.message : "Invalid request";
-  return Response.json({ error: message }, { status: fallbackStatus });
+  if (e instanceof ZodError) {
+    return Response.json({ error: "INVALID_REQUEST", issues: e.issues.map((issue) => ({
+      path: issue.path.join("."), code: issue.code,
+    })) }, { status: 400 });
+  }
+  if (e instanceof SyntaxError) {
+    return Response.json({ error: "INVALID_JSON" }, { status: 400 });
+  }
+
+  // Do not echo raw database, integration, or internal Error messages to
+  // browsers. They may disclose schema, provider credentials or private data.
+  return Response.json({ error: "REQUEST_FAILED" }, { status: Math.max(500, fallbackStatus) });
 }
 
 export const requireApiUser = requireUser;
