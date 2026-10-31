@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { errorResponse } from "@/lib/domureva/security/apiAuth.server";
+import { isSchemeCurrentlyActive } from "@/lib/domureva/funding/scheme-validity";
 import { requireCaseAction } from "@/lib/domureva/security/caseAction.server";
 import {
   optimiseFundingStack,
@@ -40,10 +41,8 @@ export const Route = createFileRoute("/api/funding/optimise")({
           const candidateSchemes: Scheme[] = [];
           const schemeNames: Record<string, string> = {};
           for (const record of source.data ?? []) {
-            if (record.valid_from && record.valid_from > today) {
-              excluded.push({ schemeId: record.id, reason: "Scheme is not active yet" });
-            } else if (record.valid_to && record.valid_to < today) {
-              excluded.push({ schemeId: record.id, reason: "Scheme validity date has passed" });
+            if (!isSchemeCurrentlyActive(record, today)) {
+              excluded.push({ schemeId: record.id, reason: "Scheme is not active on the assessment date" });
             } else if (record.max_amount == null || !Number.isFinite(Number(record.max_amount)) || Number(record.max_amount) <= 0) {
               excluded.push({ schemeId: record.id, reason: "No usable documented scheme cap" });
             } else if (!record.eligible_works.length) {
