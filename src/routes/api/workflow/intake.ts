@@ -8,6 +8,7 @@ const bodySchema = z.object({
   emptySince: z.string().optional(),
   ownerType: z.string().min(2),
   intendedUse: z.string().min(2),
+  condition: z.enum(["light_works", "moderate_refurbishment", "major_refurbishment", "structural_concerns"]).optional(),
 });
 
 export const Route = createFileRoute("/api/workflow/intake")({
@@ -40,7 +41,19 @@ export const Route = createFileRoute("/api/workflow/intake")({
             .single();
           if (ce) throw ce;
 
-          return Response.json({ property: p, case: c }, { status: 201 });
+          let conditionSaved = true;
+          if (body.condition) {
+            const { error: conditionError } = await supabaseAdmin.from("property_answers").insert({
+              case_id: c.id,
+              created_by: user.id,
+              question_key: "property_condition",
+              answer: body.condition,
+              source: "intake",
+            });
+            conditionSaved = !conditionError;
+          }
+
+          return Response.json({ property: p, case: c, conditionSaved }, { status: 201 });
         } catch (e) {
           return errorResponse(e, 400);
         }
