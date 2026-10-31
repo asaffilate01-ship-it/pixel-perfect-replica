@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { errorResponse, requireRole } from "@/lib/domureva/security/apiAuth.server";
+import { errorResponse } from "@/lib/domureva/security/apiAuth.server";
+import { requirePlatformAdmin } from "@/lib/domureva/security/platform-admin.server";
 
 const required = [
   "migrations", "rls", "typecheck", "tests", "build",
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/api/release/acceptance")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          await requireRole(request, "admin");
+          await requirePlatformAdmin(request);
           const input = schema.parse(await request.json());
           const reportedChecks = input.checks ?? {};
           // User-submitted pass flags are *never* proof of successful CI,
