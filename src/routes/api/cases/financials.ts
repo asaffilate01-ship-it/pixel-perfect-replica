@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { requireUser, errorResponse } from "@/lib/domureva/security/apiAuth.server";
+import { ApiAuthError, errorResponse } from "@/lib/domureva/security/apiAuth.server";
+import { requireCaseAccess } from "@/lib/domureva/security/caseAccess.server";
 
 const S = z.object({
   caseId: z.string().uuid(),
@@ -17,12 +18,16 @@ export const Route = createFileRoute("/api/cases/financials")({
       POST: async ({ request }) => {
         const b = S.safeParse(await request.json());
         if (!b.success) return Response.json({ error: b.error.flatten() }, { status: 400 });
+        let access;
         try {
-          await requireUser(request);
+          access = await requireCaseAccess(request, b.data.caseId);
+          if (b.data.approvedFunding !== undefined && !["council_officer", "admin"].includes(access.caseRole)) {
+            throw new ApiAuthError("ONLY_AUTHORISED_REVIEWERS_CAN_SET_APPROVED_FUNDING", 403);
+          }
         } catch (e) {
-          return errorResponse(e, 401);
+          return errorResponse(e, 400);
         }
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const { supabaseAdmin } = access;
         const x = b.data;
         const { data, error } = await supabaseAdmin
           .from("case_financials")
