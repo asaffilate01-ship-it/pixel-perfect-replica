@@ -14,6 +14,7 @@ export type CaseRole =
 export type CaseAction =
   | "match_funding"
   | "request_quotes"
+  | "submit_quote"
   | "complete_milestone"
   | "edit_financials"
   | "set_approved_funding"
@@ -28,6 +29,7 @@ export type CaseAction =
 const ACTION_ROLES: Record<CaseAction, readonly CaseRole[]> = {
   match_funding: ["owner", "council_officer", "housing_provider", "admin"],
   request_quotes: ["owner", "council_officer", "housing_provider", "admin"],
+  submit_quote: ["contractor", "admin"],
   complete_milestone: ["contractor", "surveyor", "council_officer", "admin"],
   edit_financials: ["owner", "council_officer", "housing_provider", "admin"],
   set_approved_funding: ["council_officer", "admin"],
