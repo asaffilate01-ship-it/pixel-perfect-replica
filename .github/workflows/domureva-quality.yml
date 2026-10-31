@@ -31,8 +31,6 @@ jobs:
         run: bun install --frozen-lockfile
       - name: Unit tests
         run: bun test
-      - name: Typecheck
-        run: bunx tsc --noEmit
       - name: Production build
         run: bun run build
         env:
@@ -41,6 +39,8 @@ jobs:
           VITE_SUPABASE_PROJECT_ID: domureva-ci
           SUPABASE_URL: https://example.supabase.co
           SUPABASE_SERVICE_ROLE_KEY: ci_build_placeholder_only
+      - name: Typecheck (after TanStack generated routes)
+        run: bunx tsc --noEmit
       - name: Incremental lint (repository-wide formatting debt is tracked separately)
         shell: bash
         run: |
