@@ -1,32 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { requireUser, errorResponse } from "@/lib/domureva/security/apiAuth.server";
-import { buildPackSpec } from "@/lib/domureva/applications/pdf-spec";
+import { z } from "zod";
+
+import { errorResponse } from "@/lib/domureva/security/apiAuth.server";
+import { requireCaseAction } from "@/lib/domureva/security/caseAction.server";
+import { buildCasePackPreview } from "@/lib/domureva/application-pack/preview.server";
+
+const schema = z.object({ caseId: z.string().uuid() });
 
 export const Route = createFileRoute("/api/application-pack/generate")({
   server: {
     handlers: {
       POST: async ({ request }) => {
         try {
-          const { user } = await requireUser(request);
-          const b = await request.json();
-          if (!b.caseId || !b.propertyAddress || !b.schemeTitle) {
-            return Response.json({ error: "Missing pack data" }, { status: 400 });
-          }
-          const spec = buildPackSpec({
-            caseId: b.caseId,
-            propertyAddress: b.propertyAddress,
-            schemeTitle: b.schemeTitle,
-            eligibilitySummary: b.eligibilitySummary || "",
-            sections: b.sections || [],
-          });
-          return Response.json({
-            status: spec.complete ? "ready" : "incomplete",
-            requestedBy: user.id,
-            spec,
-            pdfGeneration: "queued",
-          });
-        } catch (e) {
-          return errorResponse(e, 401);
+          const { caseId } = schema.parse(await request.json());
+          const { supabaseAdmin, property } = await requireCaseAction(request, caseId, "preview_pack");
+          const preview = await buildCasePackPreview(supabaseAdmin, caseId, property);
+          return Response.json(preview, { headers: { "Cache-Control": "no-store" } });
+        } catch (error) {
+          return errorResponse(error, 400);
         }
       },
     },
