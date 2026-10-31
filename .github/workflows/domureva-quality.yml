@@ -29,6 +29,8 @@ jobs:
           bun-version: latest
       - name: Install frozen dependencies
         run: bun install --frozen-lockfile
+      - name: Unit tests
+        run: bun test
       - name: Typecheck
         run: bunx tsc --noEmit
       - name: Lint
