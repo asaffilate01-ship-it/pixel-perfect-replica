@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { ApiAuthError, errorResponse } from "@/lib/domureva/security/apiAuth.server";
-import { requireCaseAccess } from "@/lib/domureva/security/caseAccess.server";
+import { requireCaseAction } from "@/lib/domureva/security/caseAction.server";
+import { canPerformCaseAction } from "@/lib/domureva/security/casePermissions";
 
 const S = z.object({
   caseId: z.string().uuid(),
@@ -20,8 +21,8 @@ export const Route = createFileRoute("/api/cases/financials")({
         if (!b.success) return Response.json({ error: b.error.flatten() }, { status: 400 });
         let access;
         try {
-          access = await requireCaseAccess(request, b.data.caseId);
-          if (b.data.approvedFunding !== undefined && !["council_officer", "admin"].includes(access.caseRole)) {
+          access = await requireCaseAction(request, b.data.caseId, "edit_financials");
+          if (b.data.approvedFunding !== undefined && !canPerformCaseAction(access.caseRole, "set_approved_funding")) {
             throw new ApiAuthError("ONLY_AUTHORISED_REVIEWERS_CAN_SET_APPROVED_FUNDING", 403);
           }
         } catch (e) {
