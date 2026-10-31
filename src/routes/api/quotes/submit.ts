@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
+import type { Json } from "@/integrations/supabase/types";
 
 import { ApiAuthError, errorResponse, requireUser } from "@/lib/domureva/security/apiAuth.server";
 import { requireCaseAction } from "@/lib/domureva/security/caseAction.server";
@@ -70,7 +71,7 @@ export const Route = createFileRoute("/api/quotes/submit")({
               quote_request_id: input.quoteRequestId,
               contractor_org_id: input.contractorOrgId,
               amount: Math.round(input.amount * 100) / 100,
-              details: input.details,
+              details: JSON.parse(JSON.stringify(input.details)) as Json,
               status: "submitted",
             })
             .select("id,quote_request_id,contractor_org_id,amount,status,created_at")
