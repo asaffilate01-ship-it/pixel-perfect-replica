@@ -14,8 +14,9 @@ export const Route = createFileRoute("/api/integrations/evidence")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          const { user, supabaseAdmin } = await requireCaseAccess(request, body.caseId);
           const body = schema.parse(await request.json());
+
+          const { user, supabaseAdmin } = await requireCaseAccess(request, body.caseId);
 
           const callbackUrl = `${new URL(request.url).origin}/api/public/integrations/dokuvera-webhook`;
           const requestId = crypto.randomUUID();
