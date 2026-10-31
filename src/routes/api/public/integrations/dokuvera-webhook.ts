@@ -76,7 +76,7 @@ export const Route = createFileRoute("/api/public/integrations/dokuvera-webhook"
             .select("id,case_id").eq("external_dokuvera_id", p.evidence_id).limit(1).maybeSingle();
           if (existingError) throw existingError;
           if (existing && existing.case_id !== p.case_id) {
-            return Response.json({ error: "EVIDENCE_CASE_MISMATCH" }, { status: 409 });
+            throw new Error("EVIDENCE_CASE_MISMATCH");
           }
           const attributes = {
             case_id: p.case_id,
