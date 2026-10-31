@@ -1,21 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { requireApiUser } from "@/lib/domureva/security/apiAuth.server";
+
+import { errorResponse, requireRole } from "@/lib/domureva/security/apiAuth.server";
 
 const required = [
-  "migrations",
-  "rls",
-  "typecheck",
-  "tests",
-  "build",
-  "owasp",
-  "accessibility",
-  "backup_restore",
-  "integrations",
+  "migrations", "rls", "typecheck", "tests", "build",
+  "owasp", "accessibility", "backup_restore", "integrations",
 ] as const;
-
 const schema = z.object({
-  releaseVersion: z.string().optional(),
+  releaseVersion: z.string().trim().min(1).max(60).optional(),
   checks: z.record(z.string(), z.string()).optional(),
 });
 
@@ -24,19 +17,22 @@ export const Route = createFileRoute("/api/release/acceptance")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          await requireApiUser(request);
-          const body = schema.parse(await request.json());
-          const checks = body.checks || {};
-          const missing = required.filter((k) => checks[k] !== "pass");
+          await requireRole(request, "admin");
+          const input = schema.parse(await request.json());
+          const reportedChecks = input.checks ?? {};
+          // User-submitted pass flags are *never* proof of successful CI,
+          // a security assessment, backup-restore or live acceptance testing.
           return Response.json({
-            releaseVersion: body.releaseVersion || "rc",
-            ready: missing.length === 0,
-            missing,
+            releaseVersion: input.releaseVersion ?? "unversioned",
+            ready: false,
+            status: "verification_required",
             required,
+            reportedChecks,
+            verifiedChecks: [],
+            note: "The deployment gate needs independent server-side evidence and authorised sign-off.",
           });
-        } catch (e) {
-          if (e instanceof Response) return e;
-          return Response.json({ error: e instanceof Error ? e.message : "bad request" }, { status: 400 });
+        } catch (error) {
+          return errorResponse(error, 400);
         }
       },
     },
