@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { learnWeights, type WeightedOutcome } from "@/lib/domureva/agents/learningEngine";
+import { safeEqual } from "@/lib/domureva/security/webhook";
 
 export const Route = createFileRoute("/api/agents/learn")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        if (request.headers.get("authorization") !== `Bearer ${process.env["CRON_SECRET"]}`) {
+        const cronSecret = process.env["CRON_SECRET"];
+        const presented = /^Bearer ([^\\s,]+)$/.exec(request.headers.get("authorization") ?? "")?.[1];
+        if (!cronSecret || !presented || !safeEqual(cronSecret, presented)) {
           return Response.json({ error: "unauthorised" }, { status: 401 });
         }
 
