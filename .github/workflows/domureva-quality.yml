@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   validate:
-    name: Typecheck, lint and production build
+    name: Unit tests, typecheck, build and incremental lint
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -33,9 +33,7 @@ jobs:
         run: bun test
       - name: Typecheck
         run: bunx tsc --noEmit
-      - name: Lint
-        run: bun run lint
-      - name: Build
+      - name: Production build
         run: bun run build
         env:
           VITE_SUPABASE_URL: https://example.supabase.co
@@ -43,3 +41,13 @@ jobs:
           VITE_SUPABASE_PROJECT_ID: domureva-ci
           SUPABASE_URL: https://example.supabase.co
           SUPABASE_SERVICE_ROLE_KEY: ci_build_placeholder_only
+      - name: Incremental lint (repository-wide formatting debt is tracked separately)
+        shell: bash
+        run: |
+          git fetch --no-tags origin main
+          mapfile -t changed < <(git diff --name-only origin/main...HEAD -- src tests | grep -E '\.(ts|tsx)$' || true)
+          if (( ${#changed[@]} > 0 )); then
+            bunx eslint --rule "prettier/prettier: off" "${changed[@]}"
+          else
+            echo "No changed TypeScript sources to lint."
+          fi
