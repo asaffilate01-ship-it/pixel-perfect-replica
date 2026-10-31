@@ -132,9 +132,9 @@ function NewPropertyPage() {
       if (result.matchFailed) {
         toast.warning("Case opened. The funding check needs another attempt.");
       } else if (result.matchCount > 0) {
-        toast.success("Case opened with potential reviewed funding matches.");
+        toast.success("Case opened with preliminary funding matches to review.");
       } else {
-        toast.success("Case opened. No eligible reviewed schemes were found yet.");
+        toast.success("Case opened. No preliminary funding matches were found.");
       }
       if (!result.conditionSaved) toast.warning("Your condition answer needs to be saved again.");
       void navigate({ to: "/cases/$caseId", params: { caseId: result.caseId } });
