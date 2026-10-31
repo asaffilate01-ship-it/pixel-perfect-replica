@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { ApiAuthError, errorResponse } from "@/lib/domureva/security/apiAuth.server";
-import { requireCaseAccess } from "@/lib/domureva/security/caseAccess.server";
+import { errorResponse } from "@/lib/domureva/security/apiAuth.server";
+import { requireCaseAction } from "@/lib/domureva/security/caseAction.server";
 
 const schema = z.object({ caseId: z.string().uuid(), workScope: z.record(z.any()) });
 
@@ -11,10 +11,7 @@ export const Route = createFileRoute("/api/workflow/request-quotes")({
       POST: async ({ request }) => {
         try {
           const b = schema.parse(await request.json());
-          const { supabaseAdmin, caseRole } = await requireCaseAccess(request, b.caseId);
-          if (!["owner", "council_officer", "housing_provider", "admin"].includes(caseRole)) {
-            throw new ApiAuthError("FORBIDDEN", 403);
-          }
+          const { supabaseAdmin } = await requireCaseAction(request, b.caseId, "request_quotes");
           const { data, error } = await supabaseAdmin
             .from("quote_requests")
             .insert({ case_id: b.caseId, work_scope: b.workScope, status: "open" })
