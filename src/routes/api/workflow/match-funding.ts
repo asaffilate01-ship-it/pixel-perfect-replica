@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { runFundingAgent } from "@/lib/domureva/agents/orchestrator";
-import { requireCaseAccess } from "@/lib/domureva/security/caseAccess.server";
+import { requireCaseAction } from "@/lib/domureva/security/caseAction.server";
 import { errorResponse } from "@/lib/domureva/security/apiAuth.server";
 
 const schema = z.object({ caseId: z.string().uuid() });
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/api/workflow/match-funding")({
       POST: async ({ request }) => {
         try {
           const { caseId } = schema.parse(await request.json());
-          const { supabaseAdmin } = await requireCaseAccess(request, caseId);
+          const { supabaseAdmin } = await requireCaseAction(request, caseId, "match_funding");
 
           const { data: c, error } = await supabaseAdmin
             .from("cases")
