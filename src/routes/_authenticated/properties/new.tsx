@@ -229,6 +229,10 @@ function NewPropertyPage() {
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
               Domureva can match reviewed rules and highlight missing information; eligibility and award decisions require official confirmation.
             </p>
+            <p className="mt-3 text-xs leading-5 text-muted-foreground">
+              The funding check may send the property's postcode to Postcodes.io to resolve its local authority.
+              The street address, case ID and account information are not sent to that service.
+            </p>
           </section>
         </aside>
       </div>
