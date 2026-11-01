@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
+import { loadCaseDirectory } from "@/lib/domureva/cases/directory";
 
 export const Route = createFileRoute("/_authenticated/copilot")({
   head: () => ({
@@ -57,15 +58,7 @@ function CopilotPage() {
 
   const cases = useQuery({
     queryKey: ["reva", "available-cases"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("cases")
-        .select("id, properties(postcode, address_line)")
-        .order("created_at", { ascending: false })
-        .limit(50);
-      if (error) throw error;
-      return (data ?? []) as unknown as CaseOption[];
-    },
+    queryFn: async () => (await loadCaseDirectory()).cases,
   });
 
   const sendMessage = useMutation({
