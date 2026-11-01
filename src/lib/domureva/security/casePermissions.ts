@@ -24,7 +24,8 @@ export type CaseAction =
   | "read_documents"
   | "preview_pack"
   | "export_pack"
-  | "send_message";
+  | "send_message"
+  | "manage_tasks";
 
 const ACTION_ROLES: Record<CaseAction, readonly CaseRole[]> = {
   match_funding: ["owner", "council_officer", "housing_provider", "admin"],
@@ -40,6 +41,7 @@ const ACTION_ROLES: Record<CaseAction, readonly CaseRole[]> = {
   preview_pack: ["owner", "investor", "housing_provider", "council_officer", "admin"],
   export_pack: ["owner", "housing_provider", "council_officer", "admin"],
   send_message: ["owner", "investor", "contractor", "surveyor", "housing_provider", "council_officer", "admin"],
+  manage_tasks: ["owner", "housing_provider", "council_officer", "admin"],
 };
 
 export function canPerformCaseAction(role: string, action: CaseAction): boolean {
