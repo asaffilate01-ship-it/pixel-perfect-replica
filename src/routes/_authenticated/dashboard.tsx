@@ -7,6 +7,7 @@ import { WorkspaceNav } from "@/components/workspace/WorkspaceNav";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
+import { loadCaseDirectory } from "@/lib/domureva/cases/directory";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard | DOMUREVA" }] }),
@@ -18,7 +19,7 @@ type CaseRow = { id: string; status: string | null; created_at: string; properti
 function DashboardPage() {
   const cases = useQuery({
     queryKey:["dashboard","cases"],
-    queryFn: async()=>{ const {data,error}=await supabase.from("cases").select("id, status, created_at, properties(address_line, postcode)").order("created_at",{ascending:false}).limit(6); if(error) throw error; return (data??[]) as unknown as CaseRow[]; },
+    queryFn: async()=> (await loadCaseDirectory()).cases.slice(0, 6),
   });
   const counts = useQuery({
     queryKey:["dashboard","counts"],
