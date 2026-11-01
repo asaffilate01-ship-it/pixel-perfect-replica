@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
+import { loadCaseDirectory } from "@/lib/domureva/cases/directory";
 
 export const Route = createFileRoute("/_authenticated/application-pack")({
   head: () => ({
@@ -78,14 +79,7 @@ function ApplicationPackPage() {
 
   const cases = useQuery({
     queryKey: ["pack", "case-options"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("cases")
-        .select("id,properties(address_line,postcode)")
-        .order("created_at", { ascending: false })
-        .limit(100);
-      if (error) throw error;
-      return (data ?? []) as unknown as CaseOption[];
-    },
+    queryFn: async () => (await loadCaseDirectory()).cases,
   });
 
   const documents = useQuery({
