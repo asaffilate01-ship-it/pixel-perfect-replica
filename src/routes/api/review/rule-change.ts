@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { requireRole, errorResponse } from "@/lib/domureva/security/apiAuth.server";
+import { errorResponse } from "@/lib/domureva/security/apiAuth.server";
+import { requirePlatformAdmin } from "@/lib/domureva/security/platform-admin.server";
 
 const schema = z.object({ id: z.string().uuid(), decision: z.enum(["reviewed", "rejected"]) });
 
@@ -24,8 +25,7 @@ export const Route = createFileRoute("/api/review/rule-change")({
       POST: async ({ request }) => {
         try {
           const body = schema.parse(await request.json());
-          const { user } = await requireRole(request, ["admin", "council_officer"]);
-          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          const { user, supabaseAdmin } = await requirePlatformAdmin(request);
 
           const { data: queued, error: qe } = await supabaseAdmin
             .from("rule_change_queue")
