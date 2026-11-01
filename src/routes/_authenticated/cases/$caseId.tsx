@@ -14,6 +14,28 @@ import { CASE_STAGES, progressFor, type CaseStage } from "@/lib/domureva/workflo
 export const Route = createFileRoute("/_authenticated/cases/$caseId")({
  head:()=>({meta:[{title:"Case | DOMUREVA"},{name:"description",content:"Track a single property delivery case: journey progress, Reva's recommendation and governance notes."},{property:"og:title",content:"Case | DOMUREVA"},{property:"og:description",content:"Journey progress and next actions for one property case."}]}),component:CaseDetailPage});
 type CaseRow={id:string;status:string;created_at:string;properties:{postcode:string;address_line:string|null}|null};
+
+async function loadCaseRecord(caseId: string): Promise<CaseRow | null> {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.access_token) throw new Error("Your session has expired.");
+  const response = await fetch("/api/cases/summary?caseId=" + encodeURIComponent(caseId), {
+    headers: { Authorization: "Bearer " + session.access_token },
+  });
+  if (response.status === 404 || response.status === 403) return null;
+  if (!response.ok) throw new Error("Could not load case details.");
+  const result = await response.json() as {
+    status: string;
+    openedAt: string;
+    postcode: string;
+    address: string | null;
+  };
+  return {
+    id: caseId,
+    status: result.status,
+    created_at: result.openedAt,
+    properties: { postcode: result.postcode, address_line: result.address },
+  };
+}
 function resolveStage(status: string): CaseStage | null {
   return (CASE_STAGES as readonly string[]).includes(status) ? status as CaseStage : null;
 }
@@ -27,7 +49,7 @@ const NEXT_ACTION: Record<CaseStage, { title: string; copy: string }> = {
   evidence: { title: "Verify the project close-out.", copy: "Collect final certificates, photographs and evidence needed for the occupation record." },
   complete: { title: "Review the returned-to-use outcome.", copy: "Verify final occupancy evidence and recorded impact rather than assuming the process is finished." },
 };
-function CaseDetailPage(){const {caseId}=Route.useParams();const q=useQuery({queryKey:["cases",caseId],queryFn:async()=>{const {data,error}=await supabase.from("cases").select("id,status,created_at,properties(postcode,address_line)").eq("id",caseId).maybeSingle();if(error)throw error;return data as unknown as CaseRow|null}});if(q.isLoading)return <Container><Skeleton className="h-44 w-full rounded-[30px]"/></Container>;if(q.isError||!q.data)return <Container><div className="rounded-[30px] border border-border bg-card p-10 text-center shadow-card"><p className="font-display text-xl font-bold text-primary">Case not found</p><p className="mt-2 text-sm text-muted-foreground">It may have been removed, or you don't have access to it.</p><Button asChild className="mt-5 rounded-full"><Link to="/cases">Back to cases</Link></Button></div></Container>;
+function CaseDetailPage(){const {caseId}=Route.useParams();const q=useQuery({queryKey:["cases",caseId],queryFn:()=>loadCaseRecord(caseId)});if(q.isLoading)return <Container><Skeleton className="h-44 w-full rounded-[30px]"/></Container>;if(q.isError||!q.data)return <Container><div className="rounded-[30px] border border-border bg-card p-10 text-center shadow-card"><p className="font-display text-xl font-bold text-primary">Case not found</p><p className="mt-2 text-sm text-muted-foreground">It may have been removed, or you don't have access to it.</p><Button asChild className="mt-5 rounded-full"><Link to="/cases">Back to cases</Link></Button></div></Container>;
  const record=q.data;const stage=resolveStage(record.status);const progress=stage ? progressFor(stage) : 0;const address=record.properties?.address_line??record.properties?.postcode??"Property case";const next=stage ? NEXT_ACTION[stage] : {title:"Review the current case status.",copy:"This case has an unrecognised stage. An authorised manager should verify the recorded status before proceeding."};
  return <Container className="max-w-[1240px]">
   <WorkspaceNav />
