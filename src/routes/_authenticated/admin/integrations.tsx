@@ -1,22 +1,199 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { AlertTriangle, CheckCircle2, RefreshCw, ShieldCheck, Webhook } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { AlertTriangle, ArrowRight, RefreshCw, ShieldCheck, Webhook } from "lucide-react";
 
-import { Container } from "@/components/layout/PageShell";
+import { Container, PageHeader } from "@/components/layout/PageShell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route=createFileRoute("/_authenticated/admin/integrations")({head:()=>({meta:[{title:"Integration control centre | DOMUREVA"},{name:"description",content:"Monitor health, failures, replay-safe webhooks and manual-review queues across DOMUREVA integrations."},{property:"og:title",content:"Integration control centre | DOMUREVA"},{property:"og:description",content:"Health, last success, failures and retry queues for every DOMUREVA integration."}]}),component:IntegrationsPage});
-const SYSTEMS=[{key:"leadlens",label:"LeadLens"},{key:"dokuvera",label:"Dokuvera"},{key:"gabley",label:"Gabley"},{key:"gabley_retrofit",label:"Gabley Retrofit"},{key:"craftvaro",label:"Craftvaro"},{key:"stripe",label:"Stripe"},{key:"resend",label:"Resend"}] as const;
-type EventRow={id:string;provider:string;event_type:string;status:string;error:string|null;created_at:string};
-function IntegrationsPage(){const qc=useQueryClient();const events=useQuery({queryKey:["admin","integration-events"],queryFn:async()=>{const {data,error}=await supabase.from("integration_events").select("id,provider,event_type,status,error,created_at").order("created_at",{ascending:false}).limit(200);if(error)throw error;return(data??[]) as EventRow[]}});const triggerSync=useMutation({mutationFn:async(integration:string)=>{const {data:{session}}=await supabase.auth.getSession();const res=await fetch("/api/integrations/sync",{method:"POST",headers:{"content-type":"application/json",Authorization:`Bearer ${session?.access_token??""}`},body:JSON.stringify({integration,jobType:"sync"})});const body=await res.json();if(!res.ok)throw new Error(body?.error??"Sync failed");return body as {status:string;integration:string}},onSuccess:(d)=>{toast.success(`${d.integration} sync ${d.status}`);qc.invalidateQueries({queryKey:["admin","integration-events"]})},onError:(e:Error)=>toast.error("Could not queue sync",{description:e.message})});const summaries=SYSTEMS.map(s=>{const rows=(events.data??[]).filter(e=>e.provider===s.key);return{...s,last:rows[0],success:rows.find(e=>e.status==="processed"),failures:rows.filter(e=>e.status==="failed").length}});const totalFailures=summaries.reduce((a,x)=>a+x.failures,0);
-return <Container className="max-w-[1240px]">
- <div className="overflow-hidden rounded-[30px] bg-navy p-7 text-navy-foreground shadow-lift md:p-9"><div className="flex flex-wrap items-end justify-between gap-6"><div><p className="eyebrow text-leaf-soft">Platform operations</p><h1 className="mt-3 font-display text-3xl font-bold md:text-5xl">Integration control centre</h1><p className="mt-4 max-w-2xl text-sm leading-6 text-navy-foreground/68">One operational view across discovery, evidence, retrofit, delivery, payments and communications.</p></div><Webhook className="size-9 text-leaf-soft"/></div></div>
- <div className="mt-6 grid gap-4 sm:grid-cols-3">{[[CheckCircle2,"Systems monitored",SYSTEMS.length],[AlertTriangle,"Current failures",totalFailures],[ShieldCheck,"Trust model","Server-side"]].map(([Icon,l,v])=>{const I=Icon as typeof CheckCircle2;return <div key={String(l)} className="rounded-3xl border border-border bg-card p-5 shadow-card"><I className="size-5 text-accent"/><p className="mt-4 text-sm text-muted-foreground">{String(l)}</p><p className="mt-1 font-display text-3xl font-bold text-primary">{String(v)}</p></div>})}</div>
- <div className="mt-8">{events.isLoading?<div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{Array.from({length:6}).map((_,i)=><Skeleton key={i} className="h-44 rounded-3xl"/>)}</div>:events.isError?<Card className="rounded-3xl border-destructive/40"><CardContent className="flex items-center gap-2 p-6 text-sm text-destructive"><AlertTriangle className="size-4"/>Could not load integration events.</CardContent></Card>:<div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{summaries.map(s=><Card key={s.key} className="rounded-3xl shadow-card"><CardHeader className="flex flex-row items-start justify-between gap-3 space-y-0"><div><p className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">Integration</p><CardTitle className="mt-2 text-lg">{s.label}</CardTitle></div>{s.failures>0?<Badge variant="destructive">{s.failures} failing</Badge>:<Badge className="bg-success text-success-foreground">Healthy</Badge>}</CardHeader><CardContent className="space-y-3 text-xs text-muted-foreground"><p>Last event: {s.last?new Date(s.last.created_at).toLocaleString():"none recorded"}</p><p>Last success: {s.success?new Date(s.success.created_at).toLocaleString():"none recorded"}</p>{["leadlens","dokuvera","gabley","gabley_retrofit","craftvaro"].includes(s.key)?<Button size="sm" variant="outline" className="rounded-full gap-1" disabled={triggerSync.isPending} onClick={()=>triggerSync.mutate(s.key)}><RefreshCw className="size-3"/>Sync now</Button>:null}</CardContent></Card>)}</div>}</div>
- <Card className="mt-8 rounded-3xl shadow-card"><CardHeader><CardTitle>Recent integration events</CardTitle><CardDescription>Latest webhook and job activity across all providers.</CardDescription></CardHeader><CardContent>{events.data?.length?<ul className="divide-y divide-border">{events.data.slice(0,20).map(e=><li key={e.id} className="flex items-center justify-between gap-4 py-4"><div><p className="font-medium capitalize text-primary">{e.provider} · {e.event_type.replaceAll("_"," ")}</p><p className="mt-1 text-xs text-muted-foreground">{new Date(e.created_at).toLocaleString()}</p>{e.error?<p className="mt-1 text-xs text-destructive">{e.error}</p>:null}</div><Badge variant={e.status==="failed"?"destructive":"secondary"}>{e.status}</Badge></li>)}</ul>:<div className="rounded-2xl border border-dashed border-border p-8 text-center"><Webhook className="mx-auto size-7 text-accent"/><p className="mt-3 text-sm text-muted-foreground">No integration events recorded yet.</p></div>}</CardContent></Card>
-</Container>}
+export const Route = createFileRoute("/_authenticated/admin/integrations")({
+  head: () => ({
+    meta: [
+      { title: "Integration control centre | DOMUREVA" },
+      { name: "description", content: "Platform-authorised view of integration jobs, recent webhook events and source reliability." },
+    ],
+  }),
+  component: IntegrationsPage,
+});
+
+const SYSTEMS = [
+  ["leadlens", "LeadLens"],
+  ["dokuvera", "Dokuvera"],
+  ["gabley_retrofit", "Gabley Retrofit"],
+  ["craftvaro", "Craftvaro"],
+  ["stripe", "Stripe"],
+] as const;
+
+type EventRow = {
+  id: string;
+  provider: string;
+  event_type: string;
+  status: string;
+  created_at: string;
+  processed_at: string | null;
+  error: string | null;
+};
+type IntegrationJob = {
+  id: string;
+  case_id: string | null;
+  integration: string;
+  job_type: string;
+  status: string;
+  attempts: number;
+  next_attempt_at: string | null;
+  created_at: string | null;
+  last_error: string | null;
+};
+type SourceHealth = {
+  source_key: string;
+  status: string;
+  last_success_at: string | null;
+  last_failure_at: string | null;
+  consecutive_failures: number;
+};
+type OperationalData = {
+  eventRecords: EventRow[];
+  jobs: IntegrationJob[];
+  sourceHealth: SourceHealth[];
+  note: string;
+};
+
+async function loadOperations(): Promise<OperationalData> {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.access_token) throw new Error("Sign in again to access platform operations.");
+  const response = await fetch("/api/admin/operations", {
+    headers: { Authorization: "Bearer " + session.access_token },
+  });
+  const payload = await response.json() as OperationalData & { error?: string };
+  if (!response.ok) {
+    if (response.status === 403) throw new Error("This workspace requires platform-operator access.");
+    throw new Error(payload.error ?? "Operations data could not be loaded.");
+  }
+  return payload;
+}
+
+function readableDate(date: string | null) {
+  return date ? new Date(date).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" }) : "Not recorded";
+}
+
+function IntegrationsPage() {
+  const query = useQuery({ queryKey: ["admin", "platform-operations"], queryFn: loadOperations });
+  const events = query.data?.eventRecords ?? [];
+  const jobs = query.data?.jobs ?? [];
+  const failEvents = events.filter((row) => row.status === "failed");
+  const pendingJobs = jobs.filter((row) => ["queued", "pending_processor", "retry", "running"].includes(row.status));
+
+  return (
+    <Container className="pt-7">
+      <PageHeader
+        eyebrow="Platform operations"
+        title="Integration control centre"
+        description="Review recorded inbound events, pending jobs and source health. These records are not a substitute for real integration tests."
+        actions={<Button type="button" variant="outline" className="rounded-full" disabled={query.isFetching}
+          onClick={() => void query.refetch()}><RefreshCw className="size-4" /> Refresh records</Button>}
+      />
+
+      {query.isLoading ? <div className="mt-7 grid gap-4 sm:grid-cols-3">
+        <Skeleton className="h-32 rounded-3xl" /><Skeleton className="h-32 rounded-3xl" /><Skeleton className="h-32 rounded-3xl" />
+      </div> : query.isError ? (
+        <div className="mt-7 rounded-3xl border border-destructive/30 bg-card p-8" role="alert">
+          <h2 className="font-display text-xl font-semibold text-primary">Operational records unavailable</h2>
+          <p className="mt-2 text-sm text-muted-foreground">{query.error?.message}</p>
+          <Button type="button" variant="outline" className="mt-5 rounded-full" onClick={() => void query.refetch()}>Try again</Button>
+        </div>
+      ) : (
+        <>
+          <div className="mt-7 grid gap-4 sm:grid-cols-3">
+            {[
+              ["Recent events", events.length, "Latest 100 records"],
+              ["Failed events", failEvents.length, "Requires investigation"],
+              ["Jobs awaiting processing", pendingJobs.length, "Pending is not completed"],
+            ].map(([label, value, hint]) => (
+              <div key={label} className="rounded-3xl border border-border bg-card p-5">
+                <p className="text-xs font-semibold text-muted-foreground">{label}</p>
+                <p className="mt-3 font-display text-3xl font-semibold tabular-nums text-primary">{value}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{hint}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-7 flex items-start gap-3 rounded-2xl border border-border bg-secondary/40 p-5">
+            <ShieldCheck className="mt-0.5 size-5 shrink-0 text-accent" aria-hidden="true" />
+            <p className="text-sm leading-6 text-muted-foreground">{query.data?.note}</p>
+          </div>
+
+          <section className="mt-7" aria-labelledby="providers-heading">
+            <h2 id="providers-heading" className="font-display text-xl font-semibold text-primary">Integration status by provider</h2>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {SYSTEMS.map(([key, label]) => {
+                const relevant = events.filter((item) => item.provider === key);
+                const relatedJobs = jobs.filter((item) => item.integration === key);
+                const latest = relevant[0];
+                const failures = relevant.filter((item) => item.status === "failed").length;
+                return (
+                  <article key={key} className="rounded-3xl border border-border bg-card p-6">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <h3 className="font-display text-lg font-semibold text-primary">{label}</h3>
+                      {failures ? <Badge variant="destructive">{failures} failures</Badge> : <Badge variant="secondary">Not verified live</Badge>}
+                    </div>
+                    <dl className="mt-4 space-y-3 text-sm">
+                      <div><dt className="text-xs text-muted-foreground">Last recorded event</dt><dd className="mt-1 text-foreground">{readableDate(latest?.created_at ?? null)}</dd></div>
+                      <div><dt className="text-xs text-muted-foreground">Recorded jobs</dt><dd className="mt-1 tabular-nums text-foreground">{relatedJobs.length}</dd></div>
+                      <div><dt className="text-xs text-muted-foreground">Most recent state</dt><dd className="mt-1 capitalize text-foreground">{latest?.status ?? "No activity recorded"}</dd></div>
+                    </dl>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+
+          <div className="mt-7 grid gap-5 lg:grid-cols-2">
+            <section className="rounded-3xl border border-border bg-card p-6" aria-labelledby="jobs-heading">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 id="jobs-heading" className="font-display text-xl font-semibold text-primary">Integration jobs</h2>
+                <Badge variant="secondary">{jobs.length} records</Badge>
+              </div>
+              {jobs.length ? <ul className="mt-4 divide-y divide-border">
+                {jobs.slice(0, 20).map((job) => (
+                  <li key={job.id} className="flex flex-wrap items-start justify-between gap-3 py-4">
+                    <div>
+                      <p className="font-semibold text-primary">{job.integration} · {job.job_type}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">Attempts: {job.attempts} · Created {readableDate(job.created_at)}</p>
+                      {job.last_error ? <p className="mt-2 text-xs text-destructive">{job.last_error}</p> : null}
+                    </div>
+                    <Badge variant={job.status === "failed" ? "destructive" : "secondary"} className="capitalize">{job.status.replace(/_/g, " ")}</Badge>
+                  </li>
+                ))}
+              </ul> : <p className="mt-5 text-sm text-muted-foreground">No processing jobs have been recorded.</p>}
+            </section>
+
+            <section className="rounded-3xl border border-border bg-card p-6" aria-labelledby="sources-heading">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 id="sources-heading" className="font-display text-xl font-semibold text-primary">Funding-source checks</h2>
+                <Badge variant="secondary">{query.data?.sourceHealth.length ?? 0} tracked</Badge>
+              </div>
+              {query.data?.sourceHealth.length ? <ul className="mt-4 divide-y divide-border">
+                {query.data.sourceHealth.slice(0, 20).map((source) => (
+                  <li key={source.source_key} className="flex flex-wrap items-center justify-between gap-3 py-4">
+                    <div>
+                      <p className="font-semibold text-primary">{source.source_key}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">Last success: {readableDate(source.last_success_at)}</p>
+                    </div>
+                    <Badge variant={source.consecutive_failures > 0 ? "destructive" : "secondary"}>{source.status}</Badge>
+                  </li>
+                ))}
+              </ul> : <p className="mt-5 text-sm text-muted-foreground">No funding-source health checks are recorded yet.</p>}
+            </section>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <Button asChild variant="outline" className="rounded-full"><Link to="/admin/security">Security & risk <ArrowRight className="size-4"/></Link></Button>
+            <Button asChild variant="outline" className="rounded-full"><Link to="/admin/release">Release acceptance <ArrowRight className="size-4"/></Link></Button>
+          </div>
+        </>
+      )}
+    </Container>
+  );
+}
