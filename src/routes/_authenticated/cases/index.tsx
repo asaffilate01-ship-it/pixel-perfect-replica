@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { supabase } from "@/integrations/supabase/client";
+import { loadCaseDirectory } from "@/lib/domureva/cases/directory";
 
 export const Route = createFileRoute("/_authenticated/cases/")({
   head: () => ({
@@ -36,15 +36,7 @@ function CasesPage() {
 
   const cases = useQuery({
     queryKey: ["cases", "list"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("cases")
-        .select("id, status, created_at, properties(postcode, address_line)")
-        .order("created_at", { ascending: false })
-        .limit(200);
-      if (error) throw error;
-      return (data ?? []) as unknown as CaseRow[];
-    },
+    queryFn: async () => (await loadCaseDirectory()).cases,
   });
 
   const statuses = useMemo(
