@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { runFundingAgent } from "@/lib/domureva/agents/orchestrator";
+import { evaluateSchemeGeography } from "@/lib/domureva/funding/geography";
 import { isSchemeCurrentlyActive } from "@/lib/domureva/funding/scheme-validity";
+import { hasRecentSourceCheck } from "@/lib/domureva/funding/source-freshness";
 import { requireCaseAction } from "@/lib/domureva/security/caseAction.server";
 import { errorResponse } from "@/lib/domureva/security/apiAuth.server";
 
@@ -28,18 +30,53 @@ export const Route = createFileRoute("/api/workflow/match-funding")({
 
           const { data: schemes, error: schemeError } = await supabaseAdmin
             .from("funding_schemes")
-            .select("id,status,authority,max_amount,min_empty_months,eligible_owner_types,eligible_uses,source_id,valid_from,valid_to")
+            .select("id,name,status,authority,max_amount,min_empty_months,eligible_owner_types,eligible_uses,source_id,geography,reviewed_at,valid_from,valid_to")
             .eq("status", "reviewed")
             .limit(500);
           if (schemeError) throw schemeError;
 
-          const today = new Date().toISOString().slice(0, 10);
-          const active = (schemes ?? []).filter((scheme) => isSchemeCurrentlyActive(scheme, today));
+          const now = new Date();
+          const today = now.toISOString().slice(0, 10);
+          const dateActive = (schemes ?? []).filter((scheme) => isSchemeCurrentlyActive(scheme, today));
+          const sourceIds = [...new Set(dateActive.map((scheme) => scheme.source_id))];
+          const sourceResult = sourceIds.length
+            ? await supabaseAdmin.from("source_records")
+                .select("id,last_checked_at,source_url").in("id", sourceIds).limit(500)
+            : { data: [], error: null };
+          if (sourceResult.error) throw sourceResult.error;
+
+          const sourceById = new Map((sourceResult.data ?? []).map((source) => [source.id, source]));
+          const { resolvePostcodeContext } = await import("@/lib/domureva/funding/postcode.server");
+          const location = dateActive.length ? await resolvePostcodeContext(property.postcode) : null;
+
+          const reviewQueue: Array<{ schemeId: string; reason: string }> = [];
+          let geographicalExclusions = 0;
+          const eligibleForScreen = dateActive.filter((scheme) => {
+            if (!scheme.reviewed_at) {
+              reviewQueue.push({ schemeId: scheme.id, reason: "Human review date is missing" });
+              return false;
+            }
+            if (!hasRecentSourceCheck(sourceById.get(scheme.source_id)?.last_checked_at ?? null, now)) {
+              reviewQueue.push({ schemeId: scheme.id, reason: "Source check is missing or older than 90 days" });
+              return false;
+            }
+            const geography = evaluateSchemeGeography(scheme.geography, location);
+            if (geography.status === "excluded") {
+              geographicalExclusions++;
+              return false;
+            }
+            if (geography.status === "review_required") {
+              reviewQueue.push({ schemeId: scheme.id, reason: geography.reason });
+              return false;
+            }
+            return true;
+          });
+
           const decision = runFundingAgent({
             emptyMonths: monthsSince(property.empty_since),
             ownerType: property.owner_type,
             intendedUse: property.intended_use,
-          }, active.map((scheme) => ({
+          }, eligibleForScreen.map((scheme) => ({
             id: scheme.id,
             status: "reviewed" as const,
             authority: scheme.authority,
@@ -50,27 +87,29 @@ export const Route = createFileRoute("/api/workflow/match-funding")({
             sourceId: scheme.source_id,
           })));
 
-          const activeIds = new Set(decision.output.map((item) => item.schemeId));
-          const { data: stale, error: previousError } = await supabaseAdmin
-            .from("funding_matches").select("id,scheme_id").eq("case_id", caseId);
+          const screenedIds = new Set(decision.output.map((match) => match.schemeId));
+          const { data: previous, error: previousError } = await supabaseAdmin.from("funding_matches")
+            .select("id,scheme_id").eq("case_id", caseId);
           if (previousError) throw previousError;
-          for (const entry of stale ?? []) {
-            if (activeIds.has(entry.scheme_id)) continue;
-            const { error: invalidateError } = await supabaseAdmin.from("funding_matches")
+
+          // A previously positive result cannot remain visible once source,
+          // geographic scope, review state or validity has become uncertain.
+          for (const record of previous ?? []) {
+            if (screenedIds.has(record.scheme_id)) continue;
+            const { error } = await supabaseAdmin.from("funding_matches")
               .update({
                 eligible: false,
                 confidence: null,
                 explanation: {
-                  status: "not_currently_screened",
-                  reason: "Scheme is unreviewed, retired, expired or otherwise unavailable for screening.",
+                  status: "review_required",
+                  reason: "Scheme no longer meets freshness, review, geographic or validity requirements.",
                 },
-              })
-              .eq("id", entry.id);
-            if (invalidateError) throw invalidateError;
+              }).eq("id", record.id);
+            if (error) throw error;
           }
 
           for (const match of decision.output) {
-            const { error: saveError } = await supabaseAdmin.from("funding_matches").upsert({
+            const { error } = await supabaseAdmin.from("funding_matches").upsert({
               case_id: caseId,
               scheme_id: match.schemeId,
               eligible: match.eligible,
@@ -80,11 +119,13 @@ export const Route = createFileRoute("/api/workflow/match-funding")({
                 reasons: decision.reasons,
                 modelVersion: decision.modelVersion,
                 assessmentType: "preliminary",
+                sourceChecked: true,
+                postcodeAuthorityChecked: true,
                 requiresHumanReview: true,
-                checkedAt: new Date().toISOString(),
+                checkedAt: now.toISOString(),
               },
             }, { onConflict: "case_id,scheme_id" });
-            if (saveError) throw saveError;
+            if (error) throw error;
           }
 
           const { error: runError } = await supabaseAdmin.from("agent_runs").insert({
@@ -92,11 +133,16 @@ export const Route = createFileRoute("/api/workflow/match-funding")({
             agent: decision.agent,
             input: {
               postcode: property.postcode,
+              localAuthorityCode: location?.localAuthorityCode ?? null,
               ownerType: property.owner_type,
               intendedUse: property.intended_use,
               vacancyMonths: monthsSince(property.empty_since),
             },
-            output: decision.output,
+            output: {
+              matches: decision.output,
+              reviewQueue,
+              geographicalExclusions,
+            },
             confidence: null,
             requires_human_review: true,
             model_version: decision.modelVersion,
@@ -105,7 +151,6 @@ export const Route = createFileRoute("/api/workflow/match-funding")({
           if (runError) throw runError;
 
           if (decision.output.some((match) => match.eligible)) {
-            // Never move a delivery or completed case backwards to funding.
             const { error: stageError } = await supabaseAdmin.from("cases")
               .update({ status: "funding" })
               .eq("id", caseId).in("status", ["intake", "assessment"]);
@@ -114,10 +159,18 @@ export const Route = createFileRoute("/api/workflow/match-funding")({
 
           return Response.json({
             ...decision,
-            status: "preliminary_screen",
-            screenedSchemes: active.length,
-            excludedInactiveSchemes: (schemes ?? []).length - active.length,
-            note: "A preliminary rule match is not confirmed geographic eligibility, a grant award or an authority decision.",
+            status: reviewQueue.length || (!location && dateActive.length)
+              ? "review_required"
+              : "preliminary_screen",
+            postcodeAuthority: location
+              ? { name: location.authorityName, code: location.localAuthorityCode, nation: location.nation }
+              : null,
+            screenedSchemes: eligibleForScreen.length,
+            excludedInactiveSchemes: (schemes ?? []).length - dateActive.length,
+            excludedByGeography: geographicalExclusions,
+            awaitingSourceOrGeographyReview: reviewQueue,
+            sourceFreshnessDays: 90,
+            note: "These are preliminary matches only; source freshness and postcode boundaries do not constitute grant approval or full scheme eligibility.",
           }, { headers: { "Cache-Control": "private, no-store" } });
         } catch (error) {
           return errorResponse(error, 400);
