@@ -14,6 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
+import { CaseFundingReview } from "@/components/cases/CaseFundingReview";
 
 type Task = {
   id: string;
@@ -227,6 +228,7 @@ export function CaseOperations({ caseId }: { caseId: string }) {
       <Tabs defaultValue="tasks" className="mt-7">
         <TabsList className="flex h-auto w-full justify-start gap-1 overflow-x-auto rounded-xl bg-secondary/70 p-1 sm:w-fit" aria-label="Case operations">
           <TabsTrigger value="tasks" className="gap-2"><ClipboardList className="size-4" /> Tasks</TabsTrigger>
+          <TabsTrigger value="funding" className="gap-2"><FileText className="size-4" /> Funding</TabsTrigger>
           <TabsTrigger value="messages" className="gap-2"><MessageSquare className="size-4" /> Messages</TabsTrigger>
           <TabsTrigger value="activity" className="gap-2"><FileText className="size-4" /> Activity</TabsTrigger>
         </TabsList>
@@ -315,6 +317,10 @@ export function CaseOperations({ caseId }: { caseId: string }) {
               )}
             </aside>
           </div>
+        </TabsContent>
+
+        <TabsContent value="funding" className="mt-4">
+          <CaseFundingReview caseId={caseId} canMatchFunding={summary.data?.permissions.canMatchFunding ?? false} />
         </TabsContent>
 
         <TabsContent value="messages" className="mt-4">
