@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
+import { loadCaseDirectory } from "@/lib/domureva/cases/directory";
 
 export const Route = createFileRoute("/_authenticated/applications/")({
   head: () => ({ meta: [{ title: "Application readiness | DOMUREVA" }] }),
@@ -19,13 +20,7 @@ function ApplicationsPage() {
   const [caseId, setCaseId] = useState("none");
   const cases = useQuery({
     queryKey: ["applications", "cases"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("cases")
-        .select("id,properties(postcode,address_line)")
-        .order("created_at", { ascending: false }).limit(100);
-      if (error) throw error;
-      return data ?? [];
-    },
+    queryFn: async () => (await loadCaseDirectory()).cases,
   });
   const readiness = useQuery({
     queryKey: ["applications", "readiness", caseId],
